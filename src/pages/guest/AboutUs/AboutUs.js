@@ -1,10 +1,4 @@
-import React from 'react'
-import { Divider } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom'
-
 const AboutUs = () => {
-    const navigate = useNavigate();
-
     return (
         <>
             <div className="guest-bg py-5">
@@ -16,7 +10,7 @@ const AboutUs = () => {
                                     <span className="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill mb-3">
                                         System Overview
                                     </span>
-                                    <h1 className="fw-bold mb-3">
+                                    <h1 className="text-bold mb-3">
                                         About the System
                                     </h1>
                                     <p className="text-muted">
@@ -38,14 +32,17 @@ const AboutUs = () => {
                                     </p>
                                 </div>
 
-                                <div className="d-flex justify-content-between align-items-center mt-5 pt-4 border-top">
-                                    <small className="text-muted">
-                                        © 2026 Abuyog Community College
-                                    </small>
-
-                                    <a href="mailto:francosalamanca13@gmail.com" className="text-decoration-none fw-semibold text-success">
-                                        francosalamanca13@gmail.com
-                                    </a>
+                                <div className="row mt-5 border-top border-light pt-4">
+                                    <div className="col-xl-6 text-left">
+                                        <small className="text-muted mb-2 mb-md-0">
+                                            © {new Date().getFullYear()} Abuyog Community College
+                                        </small>
+                                    </div>
+                                    <div className="col-xl-6 text-right">
+                                        <a href="mailto:francosalamanca13@gmail.com" className="text-decoration-none fw-semibold text-success text-center">
+                                            francosalamanca13@gmail.com
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
