@@ -1,4 +1,5 @@
 import React from 'react'
+import { Divider } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom'
 
 const AboutUs = () => {
@@ -6,32 +7,45 @@ const AboutUs = () => {
 
     return (
         <>
-            <div className="guest-bg d-flex align-items-center min-vh-100 bg-white">
-                <div className="container">
-                    <div className="row justify-content-center">
-                        <div className="col-md-7 col-lg-5 col-xl-4">
-                            <div className="card border-0 shadow-lg rounded-lg overflow-hidden" style={{ borderRadius: '1.25rem' }}>
-                                <div className="bg-success" style={{ height: '5px' }}></div>
+            <div className="guest-bg py-5">
+                <div className="container text-dark">
+                    <div className="row justify-content-center align-items-center">
+                        <div className="col-lg-10 col-xl-8">
+                            <div className="p-5 shadow rounded-lg border-0 bg-white">
+                                <div className="mb-4 text-center">
+                                    <span className="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill mb-3">
+                                        System Overview
+                                    </span>
+                                    <h1 className="fw-bold mb-3">
+                                        About the System
+                                    </h1>
+                                    <p className="text-muted">
+                                        Alumni Tracking & Intelligent Job Placement Platform
+                                    </p>
+                                </div>
 
-                                <div className="card-body p-5 text-center">
-                                    <div className="mb-4 d-inline-flex align-items-center justify-content-center bg-light rounded-circle shadow-sm"
-                                        style={{ width: '70px', height: '70px' }}>
-                                        <i className="fas fa-tools fa-lg text-success"></i>
-                                    </div>
-
-                                    <h3 className="font-weight-bold text-dark mb-2">Coming Soon</h3>
-                                    <p className="text-muted mb-4">
-                                        We're building something great. This page will be available shortly.
+                                <div className="fs-5 text-secondary">
+                                    <p className="mb-4">
+                                        The <strong>Abuyog Community College Alumni Tracking and Job Placement System with Recommender System</strong> is a modern web-based platform designed to manage alumni records while supporting employment opportunities through intelligent job recommendations.
                                     </p>
 
-                                    <button
-                                        onClick={() => navigate(-1)}
-                                        className="btn btn-light btn-round px-4 py-2 border shadow-sm transition-all"
-                                        style={{ borderRadius: '50px', fontWeight: '500' }}
-                                    >
-                                        <i className="fas fa-chevron-left mr-2 small"></i>
-                                        Return to Previous
-                                    </button>
+                                    <p className="mb-4">
+                                        It strengthens the connection between <strong>alumni</strong>, <strong> employers</strong>, and the <strong>institution</strong> by maintaining a centralized database of alumni profiles, employment status, skills, and job opportunities. A built-in recommender system suggests suitable job openings based on alumni skills, preferences, and assessment results.
+                                    </p>
+
+                                    <p>
+                                        By digitizing alumni tracking and job placement processes, the system improves employment monitoring, data-driven analysis, and decision-making for the college.
+                                    </p>
+                                </div>
+
+                                <div className="d-flex justify-content-between align-items-center mt-5 pt-4 border-top">
+                                    <small className="text-muted">
+                                        © 2026 Abuyog Community College
+                                    </small>
+
+                                    <a href="mailto:francosalamanca13@gmail.com" className="text-decoration-none fw-semibold text-success">
+                                        francosalamanca13@gmail.com
+                                    </a>
                                 </div>
                             </div>
                         </div>
