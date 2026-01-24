@@ -1,0 +1,24 @@
+from django.contrib import admin
+from .models import *
+
+# Register your models here.
+admin.site.register(CustomUser)
+admin.site.register(Announcement)
+admin.site.register(AnnouncementMessage)
+admin.site.register(History)
+admin.site.register(EmployerAccount)
+admin.site.register(EmployerContact)
+admin.site.register(AlumniEducationalProfile)
+admin.site.register(AlumniCertificationsProfile)
+admin.site.register(AlumniSkillsProfile)
+admin.site.register(AlumniLanguagesProfile)
+admin.site.register(AlumniScaleProfile)
+admin.site.register(JobPostPayRange)
+admin.site.register(JobPost)
+admin.site.register(JobPostCourse)
+admin.site.register(AlumniJob)
+admin.site.register(AlumniJobResume)
+admin.site.register(AlumniJobCoverLetter)
+admin.site.register(AlumniJobArchive)
+admin.site.register(EducationCourse)
+admin.site.register(JobChat)
