@@ -1,0 +1,46 @@
+{
+  "root": true,
+  "parserOptions": {
+    "ecmaVersion": 5,
+    "sourceType": "script"
+  },
+  "env": {
+    "jquery": true
+  },
+  "extends": [
+    "plugin:unicorn/recommended",
+    "xo",
+    "xo/browser"
+  ],
+  "rules": {
+    "capitalized-comments": "off",
+    "comma-dangle": [
+      "error",
+      "never"
+    ],
+    "indent": [
+      "error",
+      2,
+      {
+        "MemberExpression": "off",
+        "SwitchCase": 1
+      }
+    ],
+    "multiline-ternary": [
+      "error",
+      "always-multiline"
+    ],
+    "no-var": "off",
+    "object-curly-spacing": [
+      "error",
+      "always"
+    ],
+    "object-shorthand": "off",
+    "prefer-arrow-callback": "off",
+    "semi": [
+      "error",
+      "never"
+    ],
+    "strict": "error"
+  }
+}

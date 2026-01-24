@@ -1,0 +1,24 @@
+.job_container {
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+    /* opacity: 0; */
+    /* animation: jobWave 0.4s ease-in-out var(--row-animation-delay) forwards running; */
+}
+
+.job_container:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.11);
+}
+
+
+/* @keyframes jobWave {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-3px);
+    }
+} */

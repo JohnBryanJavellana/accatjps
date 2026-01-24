@@ -1,0 +1,17 @@
+.loader,
+.loader2 {
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(200, 200, 200, 0.319);
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loader2 {
+    background: white;
+}

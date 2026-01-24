@@ -1,0 +1,144 @@
+.slideshow-container {
+    position: relative;
+    max-width: 100%;
+    height: 500px;
+    margin: auto;
+    background-color: #000;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+/* Mobile Adjustment */
+@media (max-width: 767px) {
+    .slideshow-container {
+        height: 250px;
+    }
+
+    .text {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .prev,
+    .next {
+        padding: 8px;
+        font-size: 18px;
+    }
+}
+
+.mySlides img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.mySlides {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    /* Hide by default */
+    transition: opacity 0.8s ease-in-out;
+    /* Smooth cross-fade */
+    z-index: 0;
+}
+
+.mySlides.active-slide {
+    opacity: 1;
+    z-index: 1;
+}
+
+.customFade {
+    animation: fadeAnim 0.8s ease-in-out;
+}
+
+@keyframes fadeAnim {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.text {
+    color: white;
+    font-size: 20px;
+    padding: 15px;
+    text-align: center;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.dot-container {
+    text-align: center;
+    padding: 15px 0;
+}
+
+.dot {
+    height: 12px;
+    width: 12px;
+    margin: 0 5px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.dot.active {
+    background-color: #333;
+    transform: scale(1.2);
+    position: relative;
+    z-index: 10;
+}
+
+.prev,
+.next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: auto;
+    padding: 16px;
+    color: white;
+    z-index: 10;
+    font-weight: bold;
+    font-size: 24px;
+    border: none;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 0 5px 5px 0;
+    user-select: none;
+    transition: 0.3s;
+}
+
+.next {
+    right: 0;
+    border-radius: 5px 0 0 5px;
+}
+
+.prev:hover,
+.next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.announcement-card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.2s;
+}
+
+.announcement-card:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
