@@ -22,24 +22,27 @@ const TablePaginationTemplate = ({ dataset, rowsPerPage = 12, page = 0, rowsPerP
                 count={dataset.length}
                 page={page}
                 sx={{
-                    '& .MuiTablePagination-displayedRows': {
-                        display: 'flex',
-                        alignItems: 'center',
-                        margin: '0 0px', 
-                        userSelect: 'none'
-                    },
                     '& .MuiTablePagination-toolbar': {
                         display: 'flex',
-                        alignItems: 'center',
+                        flexWrap: { xs: 'wrap', sm: 'nowrap' },
+                        justifyContent: { xs: 'center', sm: 'flex-end' },
+                        height: { xs: 'auto', sm: '52px' },
+                        padding: { xs: '10px 0', sm: '0 16px' },
                     },
                     '& .MuiTablePagination-selectLabel': {
                         display: 'flex',
                         alignItems: 'center',
                         paddingTop: '12px !important',
-                        marginTop: '0px !important'
+                        margin: { xs: '0 4px', sm: '0 8px' }
                     },
-                    '& .MuiTablePagination-select': {
-                        marginRight: '10px'
+                    '& .MuiTablePagination-displayedRows': {
+                        display: 'flex',
+                        alignItems: 'center',
+                        marginTop: { xs: '8px', sm: '0px' },
+                        userSelect: 'none'
+                    },
+                    '& .MuiTablePagination-actions': {
+                        marginLeft: { xs: '0px', sm: '20px' }
                     }
                 }}
                 className='text-muted small'
