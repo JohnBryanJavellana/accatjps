@@ -4,7 +4,7 @@ import useGetToken from '../hooks/useGetToken';
 const GuestRoute = () => {
     const { getToken } = useGetToken();
     const isGuest = getToken('access_token');
-    return !isGuest ? <Outlet /> : <Navigate to="/access-denied" />
+    return !isGuest ? <Outlet /> : <Navigate to="/" />
 }
 
 export default GuestRoute;

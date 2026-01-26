@@ -265,8 +265,9 @@ const AlumniRegistration = () => {
                                             </FormControl>
 
                                             <FormControl fullWidth margin='dense' variant="outlined">
-                                                <InputLabel htmlFor="mname">Middle name</InputLabel>
+                                                <InputLabel htmlFor="mname">Middle name <span className='text-danger'>*</span></InputLabel>
                                                 <OutlinedInput
+                                                    required
                                                     value={mname}
                                                     onChange={(e) => setMname(e.target.value)}
                                                     id="mname"
