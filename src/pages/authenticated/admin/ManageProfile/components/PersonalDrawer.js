@@ -211,6 +211,7 @@ const PersonalDrawer = ({ id, data, modalTitle, callbackFunction }) => {
                             />
                         </FormControl>
 
+                        1
                         <FormControl fullWidth margin='dense'>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
@@ -222,7 +223,7 @@ const PersonalDrawer = ({ id, data, modalTitle, callbackFunction }) => {
                                     slotProps={{
                                         popper: {
                                             sx: {
-                                                zIndex: 20000
+                                                disablePortal: true
                                             }
                                         }
                                     }}
