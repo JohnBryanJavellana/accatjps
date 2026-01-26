@@ -219,7 +219,10 @@ const PersonalDrawer = ({ id, data, modalTitle, callbackFunction }) => {
                                     sx={{ width: '100%' }}
                                     slotProps={{
                                         popper: {
-                                            sx: { zIndex: 99999 }
+                                            sx: { zIndex: 3000 }
+                                        },
+                                        dialog: {
+                                            sx: { zIndex: 3000 }
                                         }
                                     }}
                                 />

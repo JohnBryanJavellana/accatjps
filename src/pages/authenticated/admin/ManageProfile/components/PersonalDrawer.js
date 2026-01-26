@@ -211,7 +211,6 @@ const PersonalDrawer = ({ id, data, modalTitle, callbackFunction }) => {
                             />
                         </FormControl>
 
-                        55
                         <FormControl fullWidth margin='dense'>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
