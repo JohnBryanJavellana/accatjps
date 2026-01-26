@@ -149,15 +149,29 @@ def serialize_single_instance(obj):
                 
     return item
 
-def serialize_announcement(announcement):
-    return {
+def serialize_announcement(announcement, request=None):
+    data = {
         "id": announcement.id,
         "title": announcement.title,
         "content": announcement.content,
-        "created_at": announcement.created_at,
+        "created_at": announcement.created_at.strftime("%Y-%m-%d %H:%M:%S") if announcement.created_at else None,
         "can_message": announcement.can_message,
-        "author": serialize_user_full_profile(announcement.user)
+        "author": serialize_user_full_profile(announcement.user, request)
     }
+
+    if announcement.attachment:
+        data['attachment'] = request.build_absolute_uri(announcement.attachment.url) if request else announcement.attachment.url
+        
+        file_url = announcement.attachment.url.lower()
+        if file_url.endswith(('.mp4', '.webm', '.ogg', '.mov')):
+            data['attachment_type'] = 'video'
+        else:
+            data['attachment_type'] = 'image'
+    else:
+        data['attachment'] = None
+        data['attachment_type'] = None
+
+    return data
 
 def serialize_job_chat(chat, request=None):
     chat_data = model_to_dict(chat)

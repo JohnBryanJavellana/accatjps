@@ -332,21 +332,29 @@ def create_or_update_announcement(request):
         content = request.POST.get('content')
         documentId = request.POST.get('documentId')
         can_message = request.POST.get('can_message', "0")
+        attachment = request.FILES.get('attachment', None)
 
         if not title or not content:
-            return JsonResponse({'success': False, "message": "No data supplied."}, status=422)
+            return JsonResponse({'success': False, "message": "Title and content are required."}, status=422)
         
-        Announcement.objects.update_or_create(
-            id=documentId,
-            user=request.user,
-            defaults={
-                'title': title,
-                'can_message': can_message,
-                'content': content
-            }
+        announcement_defaults = {
+            'user': request.user,
+            'title': title,
+            'can_message': can_message,
+            'content': content
+        }
+
+        if attachment:
+            announcement_defaults['attachment'] = attachment
+
+        announcement, created = Announcement.objects.update_or_create(
+            id=documentId if documentId and documentId != "null" else None,
+            defaults=announcement_defaults
         )
 
-        return JsonResponse({'success': True, 'message': "Announcement Saved." }, status=200)
+        message = "Announcement Created." if created else "Announcement Updated."
+        return JsonResponse({'success': True, 'message': message}, status=200)
+
     except Exception as e:
         return JsonResponse({'success': False, "message": str(e)}, status=400)
 

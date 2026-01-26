@@ -44,6 +44,7 @@ class Announcement(models.Model):
     title = models.CharField(max_length=250)
     content = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    attachment = models.FileField(upload_to = 'static/announcement/', null=True, blank=True)
     can_message = models.CharField(max_length=50, default=Status.CANNOT_MESSAGE, choices=Status.choices)  
 
 class AnnouncementMessage(models.Model):
