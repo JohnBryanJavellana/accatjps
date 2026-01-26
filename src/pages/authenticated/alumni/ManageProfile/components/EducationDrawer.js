@@ -104,6 +104,7 @@ const EducationDrawer = ({ id, data, modalTitle, callbackFunction, isFromGuest =
                                             renderInput={(params) => <TextField {...params} label="Course or qualification" />}
                                             slotProps={{
                                                 popper: {
+                                                    container: () => document.getElementById(`education_info_${id}`),
                                                     sx: { zIndex: 9999 }
                                                 }
                                             }}
@@ -132,6 +133,7 @@ const EducationDrawer = ({ id, data, modalTitle, callbackFunction, isFromGuest =
                                                 sx={{ width: '100%' }}
                                                 slotProps={{
                                                     popper: {
+                                                        container: () => document.getElementById(`education_info_${id}`),
                                                         sx: { zIndex: 99999 }
                                                     }
                                                 }}

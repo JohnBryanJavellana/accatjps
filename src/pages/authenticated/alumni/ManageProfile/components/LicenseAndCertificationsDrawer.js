@@ -119,6 +119,7 @@ const LicenseAndCertificationsDrawer = ({ id, data, modalTitle, callbackFunction
                                     sx={{ width: '100%' }}
                                     slotProps={{
                                         popper: {
+                                            container: () => document.getElementById(`lc_info_${id}`),
                                             sx: { zIndex: 99999 }
                                         }
                                     }}
