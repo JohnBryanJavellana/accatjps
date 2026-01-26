@@ -27,6 +27,33 @@ const AAnnouncement = () => {
         return () => { };
     }, []);
 
+    const DeleteDocument = async (id) => {
+        try {
+            let ask = window.confirm(`Are you sure you want to remove this announcement? This cannot be undone`);
+            if (ask === false) return;
+
+            const atoken = getToken('access_token');
+            const formData = new FormData();
+            formData.append('documentId', id);
+
+            const response = await axios.post(`${url}/authenticated/administrator/announcement/remove-announcement`, formData, {
+                headers: {
+                    Authorization: `Bearer ${atoken}`
+                }
+            });
+
+            if (response.data.success) {
+                alert(response.data.message);
+            }
+        } catch (error) {
+            error.response.data.status === 500
+                ? navigate('/access-denied')
+                : alert(error.response.data.message);
+        } finally {
+            GetAnnouncements(false);
+        }
+    }
+
     const GetAnnouncements = async (isInitialLoad) => {
         try {
             setIsFetching(isInitialLoad);
@@ -120,15 +147,12 @@ const AAnnouncement = () => {
                     {
                         'icon': 'delete',
                         'url': '#',
-                        'data-toggle': 'modal',
-                        'data-target': `#view_user_info_${row.id}`,
+                        'data-toggle': '',
+                        'data-target': ``,
                         'id': 'f',
                         'textColor': 'danger',
                         'onClick': () => {
-                            setIsModalOpen('YES');
-                            setModalData(row);
-                            setModalOpenId(row.id);
-                            setModalIndex(0);
+                            DeleteDocument(row.id);
                         },
                         'label': 'Remove Announcement'
                     }
