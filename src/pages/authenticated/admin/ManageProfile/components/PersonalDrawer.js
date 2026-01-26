@@ -222,6 +222,7 @@ const PersonalDrawer = ({ id, data, modalTitle, callbackFunction }) => {
                                     slotProps={{
                                         popper: {
                                             container: () => document.getElementById(`personal_info_${id}`),
+                                            disablePortal: false,
                                             sx: { zIndex: 99999 }
                                         }
                                     }}

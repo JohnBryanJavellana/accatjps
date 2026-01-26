@@ -134,6 +134,7 @@ const EducationDrawer = ({ id, data, modalTitle, callbackFunction, isFromGuest =
                                                 slotProps={{
                                                     popper: {
                                                         container: () => document.getElementById(`education_info_${id}`),
+                                                        disablePortal: false,
                                                         sx: { zIndex: 99999 }
                                                     }
                                                 }}
