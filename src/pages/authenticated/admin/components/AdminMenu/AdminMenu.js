@@ -62,7 +62,7 @@ const AdminMenu = () => {
             <Box sx={{ flexGrow: 1 }}>
                 <AppBar position="fixed" elevation={0} color='success' sx={{
                     borderBottom: '1px solid #2c6942',
-                    zIndex: (theme) => theme.zIndex.appBar
+                    zIndex: 1000
                 }}>
                     <div className="container">
                         <Toolbar disableGutters>
@@ -143,11 +143,11 @@ const AdminMenu = () => {
                 <Collapse in={isMenuOpen} timeout="auto" unmountOnExit>
                     <Box sx={{
                         position: 'fixed',
-                        top: '65px', // Matches your first AppBar height
+                        top: '65px',
                         left: 0,
                         right: 0,
                         bgcolor: '#2e7d32',
-                        zIndex: 1000,
+                        zIndex: 999,
                         borderBottom: '5px solid #D6A73D',
                         boxShadow: 3
                     }}>
