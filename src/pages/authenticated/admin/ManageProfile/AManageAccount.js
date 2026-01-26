@@ -104,6 +104,7 @@ const AManageAccount = () => {
                                                 width: '150px',
                                                 height: '150px'
                                             }} onClick={handleImageClick}>
+                                                {`${urlWithoutToken}${userData?.profile_picture}`}
                                                 <img src={`${urlWithoutToken}${userData?.profile_picture}`} className='rounded-circle elevation-1 img-fluid'
                                                     style={{
                                                         width: '100%',
