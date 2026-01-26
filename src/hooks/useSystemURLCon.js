@@ -1,6 +1,7 @@
 const useSystemURLCon = () => {
-    const url = "http://72.62.116.26/api";
-    const urlWithoutToken = "http://72.62.116.26";
+    // Use the domain name and https
+    const url = "https://accatjps.online/api";
+    const urlWithoutToken = "https://accatjps.online";
 
     return { url, urlWithoutToken };
 }
