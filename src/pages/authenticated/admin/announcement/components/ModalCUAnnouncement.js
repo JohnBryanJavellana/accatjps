@@ -6,6 +6,7 @@ import useSystemURLCon from '../../../../../hooks/useSystemURLCon';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ModalTemplate from '../../../components/ModalTemplate/ModalTemplate';
+import CustomFileUpload from '../../../components/CustomFileUpload/CustomFileUpload';
 
 const ModalCUAnnouncement = ({ id, data, modalTitle, callbackFunction, canMessage = "0" }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -15,6 +16,7 @@ const ModalCUAnnouncement = ({ id, data, modalTitle, callbackFunction, canMessag
     const { getToken } = useGetToken();
     const { url } = useSystemURLCon();
     const navigate = useNavigate();
+    const [attachment, setAttachment] = useState(null);
 
     useEffect(() => {
         setTitle(data?.title);
@@ -30,6 +32,7 @@ const ModalCUAnnouncement = ({ id, data, modalTitle, callbackFunction, canMessag
             formData.append('title', title);
             formData.append('content', content);
             formData.append('can_message', canMessage);
+            formData.append('attachment', attachment);
             if (data) formData.append('documentId', data?.id);
 
             await axios.post(`${url}/authenticated/administrator/announcement/create-or-update-announcement`, formData, {
@@ -86,6 +89,16 @@ const ModalCUAnnouncement = ({ id, data, modalTitle, callbackFunction, canMessag
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
                             rows={8}
+                        />
+
+                        <CustomFileUpload
+                            id="sec"
+                            label="Add Photo"
+                            description="Add photo to your post or announcement"
+                            icon="fas fa-file"
+                            color="#14a8fd"
+                            file={attachment}
+                            setFile={setAttachment}
                         />
                     </>
                 }

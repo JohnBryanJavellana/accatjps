@@ -12,7 +12,7 @@ import ModalAnnouncement from '../../admin/announcement/components/ModalAnnounce
 const NewsFeed = () => {
     const { getToken } = useGetToken();
     const navigate = useNavigate();
-    const { url } = useSystemURLCon();
+    const { url, urlWithoutToken } = useSystemURLCon();
     const [isFetching, setIsFetching] = useState(true);
     const [announcements, setAnnouncements] = useState([]);
     const { formatDateToReadable } = useDateFormat();
@@ -163,6 +163,16 @@ const NewsFeed = () => {
                                                 }}>
                                                 {a.title}
                                             </h2>
+
+                                            {a?.attachment && (
+                                                <div className="my-3">
+                                                    {a?.attachment.match(/\.(mp4|webm|ogg)$/i) ? (
+                                                        <video src={`${urlWithoutToken}${a?.attachment}`} controls className="img-fluid rounded" />
+                                                    ) : (
+                                                        <img src={`${urlWithoutToken}${a?.attachment}`} alt="Attachment" className="img-fluid rounded" />
+                                                    )}
+                                                </div>
+                                            )}
 
                                             <div className="text-secondary mb-4" style={{ fontSize: '15px', lineHeight: '1.7', color: '#4a5568' }}>
                                                 {previewText}

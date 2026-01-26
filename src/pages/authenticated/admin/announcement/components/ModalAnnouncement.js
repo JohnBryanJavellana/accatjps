@@ -92,7 +92,19 @@ const ModalAnnouncement = ({ id, data, modalTitle, callbackFunction, canMessage 
                         <small className="text-muted"><i className="far fa-clock mr-1"></i>{formatDateToReadable(data?.created_at)}</small>
                     </div>
                 </div>
+
                 <h2 className="fw-bold text-dark mb-4" style={{ fontSize: '2rem', lineHeight: '1.2' }}>{data?.title}</h2>
+
+                {data?.attachment && (
+                    <div className="mb-3">
+                        {data?.attachment.match(/\.(mp4|webm|ogg)$/i) ? (
+                            <video src={`${urlWithoutToken}${data?.attachment}`} controls className="img-fluid rounded" />
+                        ) : (
+                            <img src={`${urlWithoutToken}${data?.attachment}`} alt="Attachment" className="img-fluid rounded" />
+                        )}
+                    </div>
+                )}
+
                 <div className="text-secondary" style={{ fontSize: '16px', lineHeight: '1.8', whiteSpace: 'pre-line', textAlign: 'justify' }}>
                     {data?.content}
                 </div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import useGetToken from '../../../../hooks/useGetToken';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import useSystemURLCon from '../../../../hooks/useSystemURLCon';
 import SkeletonLoader from '../../components/SkeletonLoader/SkeletonLoader';
 import axios from 'axios';
@@ -13,7 +13,7 @@ import ModalAnnouncement from './components/ModalAnnouncement';
 const AAnnouncement = () => {
     const { getToken } = useGetToken();
     const navigate = useNavigate();
-    const { url } = useSystemURLCon();
+    const { url, urlWithoutToken } = useSystemURLCon();
     const [isFetching, setIsFetching] = useState(true);
     const [announcements, setAnnouncements] = useState([]);
     const { formatDateToReadable } = useDateFormat();
@@ -55,6 +55,16 @@ const AAnnouncement = () => {
             sortable: true,
             width: "130px",
             style: { whiteSpace: "nowrap" },
+        },
+        {
+            name: "Attachment",
+            cell: row => {
+                return row.attachment ? <Link to={`${urlWithoutToken}${row.attachment}`} target='_blank'>
+                    <img src={`${urlWithoutToken}${row.attachment}`} className='img-fluid' />
+                </Link> : <>--</>
+            },
+            sortable: true,
+            width: '130px'
         },
         {
             name: "Title",
