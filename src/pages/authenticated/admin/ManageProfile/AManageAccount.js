@@ -47,6 +47,8 @@ const AManageAccount = () => {
                 refreshUser();
             }
         } catch (error) {
+            alert(error.message);
+
             error.response.data.status === 500
                 ? navigate('/access-denied')
                 : alert(error.response.data.message);
