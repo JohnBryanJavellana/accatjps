@@ -163,7 +163,7 @@ const PersonalDrawer = ({ id, data, modalTitle, callbackFunction }) => {
                                     disableScrollLock: true,
                                     container: () => document.getElementById(`personal_info_${id}`),
                                     PaperProps: {
-                                        sx: { zIndex: 3000 }
+                                        sx: { zIndex: 10000000 }
                                     }
                                 }}
                             >
@@ -190,7 +190,7 @@ const PersonalDrawer = ({ id, data, modalTitle, callbackFunction }) => {
                                     disableScrollLock: true,
                                     container: () => document.getElementById(`personal_info_${id}`),
                                     PaperProps: {
-                                        sx: { zIndex: 3000 }
+                                        sx: { zIndex: 10000000 }
                                     }
                                 }}
                             >
@@ -223,7 +223,7 @@ const PersonalDrawer = ({ id, data, modalTitle, callbackFunction }) => {
                                         popper: {
                                             container: () => document.getElementById(`personal_info_${id}`),
                                             disablePortal: false,
-                                            sx: { zIndex: 99999 }
+                                            sx: { zIndex: 10000000 }
                                         }
                                     }}
                                 />

@@ -1,5 +1,6 @@
 .modal {
     z-index: 9999 !important;
+    position: relative;
 }
 
 .bg-stack {

@@ -121,7 +121,7 @@ const LicenseAndCertificationsDrawer = ({ id, data, modalTitle, callbackFunction
                                         popper: {
                                             container: () => document.getElementById(`lc_info_${id}`),
                                             disablePortal: false,
-                                            sx: { zIndex: 99999 }
+                                            sx: { zIndex: 10000000 }
                                         }
                                     }}
                                 />
