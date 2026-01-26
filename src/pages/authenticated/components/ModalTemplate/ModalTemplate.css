@@ -6,6 +6,11 @@
     z-index: 1999 !important;
 }
 
+.MuiPopover-root,
+.MuiPopper-root {
+    z-index: 3000 !important;
+}
+
 .bg-stack {
     background-color: rgba(0, 0, 0, 0.4) !important;
 }
