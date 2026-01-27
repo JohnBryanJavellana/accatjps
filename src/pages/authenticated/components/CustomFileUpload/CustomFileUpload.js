@@ -96,10 +96,10 @@ const CustomFileUpload = ({ id, label, description, file, setFile, icon, color, 
                                     className="flex-grow-1 overflow-hidden me-2"
                                     role="button"
                                     onClick={() => document.getElementById(id).click()}
-                                    style={{ cursor: 'pointer' }}
+                                    style={{ cursor: 'pointer', minWidth: 0 }}
                                     title="Click to change file"
                                 >
-                                    <div className="text-dark fw-bold text-truncate" style={{ fontSize: '11px' }}>
+                                    <div className="text-dark fw-bold" style={{ fontSize: '11px', lineHeight: '20px' }}>
                                         {file.name}
                                     </div>
                                     <div className="text-primary" style={{ fontSize: '9px', fontWeight: '600' }}>
