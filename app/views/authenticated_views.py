@@ -142,7 +142,7 @@ def update_user_profile_info(request):
 
             token = default_token_generator.make_token(user)
             uid = urlsafe_base64_encode(force_bytes(user.pk))
-            verify_url = f"http://localhost:3000/verify/{uid}/{token}/"
+            verify_url = f"https://www.accatjps.online/verify/{uid}/{token}/"
 
             send_mail(
                 subject="Verify your New Email",

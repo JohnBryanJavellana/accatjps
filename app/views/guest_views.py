@@ -182,7 +182,7 @@ def register_user(request):
 
             token = default_token_generator.make_token(user)
             uid = urlsafe_base64_encode(force_bytes(user.pk))
-            verify_url = f"http://localhost:3000/verify/{uid}/{token}/"
+            verify_url = f"https://www.accatjps.online/verify/{uid}/{token}/"
 
             send_mail(
                 subject="Verify your Email",
@@ -235,7 +235,7 @@ def request_password_reset(request):
         if user:
             token = default_token_generator.make_token(user)
             uid = urlsafe_base64_encode(force_bytes(user.pk))
-            reset_url = f"http://localhost:3000/password-reset-confirm/{uid}/{token}/"
+            reset_url = f"https://www.accatjps.online/password-reset-confirm/{uid}/{token}/"
 
             send_mail(
                 subject="Password Reset Request",
