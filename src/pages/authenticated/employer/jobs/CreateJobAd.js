@@ -150,7 +150,7 @@ const CreateJobAd = ({ data = null, callbackFunction = null, modalId = null }) =
                 progress: true
             });
         }
-    }, [data, userData]);
+    }, [data, userData, isFetching, isFetchingCourses]);
 
     useEffect(() => {
         console.log("Course Added: ", course);
