@@ -10,6 +10,7 @@ import { Chip, FormControl, InputLabel, OutlinedInput } from '@mui/material';
 import AViewJobPost from '../../authenticated/alumni/jobs/components/AViewJobPost';
 import TablePaginationTemplate from '../../authenticated/components/TablePaginationTemplate';
 import TimeAgo from 'react-timeago';
+import { locale } from 'dayjs';
 
 const Jobs = () => {
     const navigate = useNavigate();
@@ -147,11 +148,11 @@ const Jobs = () => {
                                                             setModalIndex(0);
                                                             setModalData(job);
                                                         }}>
-                                                            <div className="card-body text-sm">
+                                                            <div className="card-body text-sm pb-2">
                                                                 <div className="row">
-                                                                    <div className="col-xl-10">
+                                                                    <div className="col-xl-10 mb-2">
                                                                         <div className="row">
-                                                                            <div className="col-xl-12 text-bold h5">
+                                                                            <div className="col-xl-12 text-bold text-dark h5">
                                                                                 {job?.title}
                                                                             </div>
 
@@ -181,12 +182,12 @@ const Jobs = () => {
                                                                             </div>
 
                                                                             <div className="col-xl-12 text-muted mt-2">
-                                                                                <TimeAgo date={job.created_at} />
+                                                                                <TimeAgo locale="en" date={job.created_at} />
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div className="col-xl-2 text-center">
-                                                                        <img src={job?.posted_by.profile_picture} className='rounded-circle elevation-1' height={80} />
+                                                                    <div className="col-xl-2 text-center mb-2">
+                                                                        <img src={job?.posted_by.profile_picture} className='elevation-1' height={80} />
                                                                     </div>
                                                                 </div>
                                                             </div>

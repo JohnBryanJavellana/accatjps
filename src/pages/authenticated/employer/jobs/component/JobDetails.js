@@ -27,7 +27,7 @@ const JobDetails = ({ jobId, callbackFunction }) => {
                 headers['Authorization'] = `Bearer ${token}`;
             }
 
-            const response = await axios.get(`${url}/authenticated/employer/jobs/1`, {
+            const response = await axios.get(`${url}/authenticated/employer/jobs/${jobId}`, {
                 headers: headers
             });
 
