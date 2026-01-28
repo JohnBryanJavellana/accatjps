@@ -55,7 +55,7 @@ def serialize_user_full_profile(user, request=None):
 
 def serialize_job_post(job, user_profile=None, request=None, is_bookmarked=False, application_status=None):
     job_data = model_to_dict(job)
-    job_data['created_at'] = job.created_at.strftime("%Y-%m-%d %H:%M:%S")
+    job_data['created_at'] = job.created_at
     
     if job.pay_range:
         job_data['pay_range_details'] = model_to_dict(job.pay_range)
