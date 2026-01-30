@@ -188,41 +188,59 @@ def serialize_job_chat(chat, request=None):
     chat_data['to_sender'] = serialize_user_full_profile(chat.to_sender, request)
     return chat_data
 
+def serialize_notifications(notification, request=None):
+    notification_data = model_to_dict(notification)
+    notification_data['created_at'] = notification.created_at.isoformat()
+    notification_data['from_user'] = serialize_user_full_profile(notification.from_user, request) if notification.from_user else None
+    notification_data['to_user'] = serialize_user_full_profile(notification.to_user, request) if notification.to_user else None
+    
+    return notification_data
+
 def generate_prediction(profile, id3_model):
     if not profile:
         return {'is_employable': False, 'prediction_text': "No Scale Profile"}
 
+    def get_val(attr):
+        if isinstance(profile, dict):
+            if attr in profile:
+                return profile.get(attr, 0)
+            scale = profile.get('scale_profile', {})
+            if isinstance(scale, dict):
+                return scale.get(attr, 0)
+            return 0
+        return getattr(profile, attr, 0)
+
     try:
         features = [
-            int(profile.general_appearance or 0),
-            int(profile.manner_of_speaking or 0),
-            int(profile.physical_condition or 0),
-            int(profile.mental_alertness or 0),
-            int(profile.self_confidence or 0),
-            int(profile.ability_to_present_ideas or 0),
-            int(profile.communication_skills or 0),
-            int(profile.student_performance_rating or 0)
+            int(get_val('general_appearance') or 0),
+            int(get_val('manner_of_speaking') or 0),
+            int(get_val('physical_condition') or 0),
+            int(get_val('mental_alertness') or 0),
+            int(get_val('self_confidence') or 0),
+            int(get_val('ability_to_present_ideas') or 0),
+            int(get_val('communication_skills') or 0),
+            int(get_val('student_performance_rating') or 0)
         ]
     except (ValueError, TypeError):
         return {'is_employable': False, 'prediction_text': "Invalid Data"}
     
     total_score = sum(features)
-    if total_score <= 25:
-        return {
-            'is_employable': False,
-            'prediction_text': "Less Employable",
-            'score_sum': total_score
-        }
-    
+
     if total_score >= 32:
         return {
             'is_employable': True,
             'prediction_text': "Employable",
             'score_sum': total_score
         }
+    
+    if total_score <= 25:
+        return {
+            'is_employable': False,
+            'prediction_text': "Less Employable",
+            'score_sum': total_score
+        }
 
     raw_prediction = id3_model.predict([features])[0]
-
     is_employable = bool(str(raw_prediction) == "1" or raw_prediction == 1)
 
     return {

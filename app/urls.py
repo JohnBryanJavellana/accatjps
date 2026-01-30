@@ -31,6 +31,8 @@ urlpatterns = [
     path('api/password-reset-confirm/<str:uidb64>/<str:token>/', confirm_password_reset, name='api_password_reset_confirm'),
 
     path('api/authenticated/get-courses/', get_courses, name='get_courses'),
+    path('api/authenticated/get-notifications', get_notifications, name='get_notifications'),
+    path('api/authenticated/update-notification', update_notification, name='update_notification'),
     path('api/authenticated/get-job-chats', get_job_chats, name='get_job_chats'),
     path('api/authenticated/submit-job-chat', submit_job_chat, name='submit_job_chat'),
     path('api/authenticated/get-current-user/', get_current_user, name='get_current_user'),
