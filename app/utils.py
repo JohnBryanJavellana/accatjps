@@ -205,14 +205,14 @@ def generate_prediction(profile, id3_model):
         return {'is_employable': False, 'prediction_text': "Invalid Data"}
     
     total_score = sum(features)
-    if total_score <= 24:
+    if total_score <= 25:
         return {
             'is_employable': False,
             'prediction_text': "Less Employable",
             'score_sum': total_score
         }
     
-    if total_score == 32:
+    if total_score >= 32:
         return {
             'is_employable': True,
             'prediction_text': "Employable",
