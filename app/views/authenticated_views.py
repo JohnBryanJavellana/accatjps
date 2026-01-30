@@ -16,13 +16,21 @@ from django.db import transaction
 from app.utils import *
 from django.db.models import Exists, OuterRef, Q
 
+import joblib
+import warnings
+from sklearn.exceptions import InconsistentVersionWarning
+
+warnings.filterwarnings("ignore", category=InconsistentVersionWarning)
+MODEL_PATH = os.path.join(settings.BASE_DIR, "id3_model.pkl")
+id3_model = joblib.load(MODEL_PATH)
+
 @api_view(['GET'])
 @transaction.atomic
 @permission_classes([IsAuthenticated])
 def get_current_user(request):
     try:
         user = request.user
-        user_data = serialize_user_full_profile(user)
+        user_data = serialize_user_full_profile(user, id3_model=id3_model)
         return JsonResponse({ 'user_info': user_data }, status=200)
         
     except Exception as e:

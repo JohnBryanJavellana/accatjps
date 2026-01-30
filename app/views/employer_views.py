@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view, permission_classes # type: ignor
 from rest_framework.permissions import IsAuthenticated, AllowAny # type: ignore
 from django.db import transaction
 from django.forms.models import model_to_dict
-from app.utils import serialize_user_full_profile, serialize_job_post
+from app.utils import *
 import joblib
 from django.db.models import Count, Q
 import re
@@ -315,20 +315,10 @@ def get_candidates(request, jobId):
             
             scale = candidate_info.get('scale_profile')
             if scale:
-                features = [
-                    scale.get('general_appearance', 0),
-                    scale.get('manner_of_speaking', 0),
-                    scale.get('physical_condition', 0),
-                    scale.get('mental_alertness', 0),
-                    scale.get('self_confidence', 0),
-                    scale.get('ability_to_present_ideas', 0),
-                    scale.get('communication_skills', 0),
-                    scale.get('student_performance_rating', 0)
-                ]
-                
-                prediction = id3_model.predict([features])[0]
-                candidate_info['ai_prediction'] = "Employable" if int(prediction) == 1 else "Not Employable"
-                candidate_info['is_ai_recommended'] = bool(int(prediction) == 1)
+                prediction = generate_prediction(profile=candidate_info, id3_model=id3_model)
+
+                candidate_info['ai_prediction'] = prediction['prediction_text']
+                candidate_info['is_ai_recommended'] = prediction['is_employable']
             else:
                 candidate_info['ai_prediction'] = "No Scale Profile"
                 candidate_info['is_ai_recommended'] = False

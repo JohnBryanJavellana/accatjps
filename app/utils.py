@@ -5,7 +5,7 @@ from django.db.models.query import QuerySet
 import re
 import math
 
-def serialize_user_full_profile(user, request=None):
+def serialize_user_full_profile(user, request=None, id3_model=None):
     user_data = model_to_dict(user, exclude=['password', 'user_permissions', 'groups'])
     
     if user.profile_picture:
@@ -29,7 +29,18 @@ def serialize_user_full_profile(user, request=None):
         user_data['skills'] = list(user.alumniskillsprofile_set.all().values())
         user_data['languages'] = list(user.alumnilanguagesprofile_set.all().values())
         
-        scale = user.alumniscaleprofile_set.all()[0] if user.alumniscaleprofile_set.all() else None
+        scale_queryset = user.alumniscaleprofile_set.all()
+        scale = scale_queryset[0] if scale_queryset.exists() else None
+
+        if scale:
+            prediction = generate_prediction(profile=scale, id3_model=id3_model)
+            user_data['ai_prediction'] = prediction['prediction_text']
+            user_data['is_ai_recommended'] = prediction['is_employable']
+            user_data['total_profile_score'] = prediction.get('score_sum', 0)
+        else:
+            user_data['ai_prediction'] = "No Scale Profile"
+            user_data['is_ai_recommended'] = False
+
         user_data['scale_profile'] = model_to_dict(scale) if scale else None
         user_data['job_history'] = list(user.alumnijob_set.all().values())
 
@@ -53,7 +64,7 @@ def serialize_user_full_profile(user, request=None):
 
     return user_data
 
-def serialize_job_post(job, user_profile=None, request=None, is_bookmarked=False, application_status=None):
+def serialize_job_post(job, user_profile=None, request=None, is_bookmarked=False, application_status=None, user_score=0, is_employable=False):
     job_data = model_to_dict(job)
     job_data['created_at'] = job.created_at
     
@@ -65,36 +76,31 @@ def serialize_job_post(job, user_profile=None, request=None, is_bookmarked=False
     job_data['application_status'] = application_status
     
     job_course_links = job.jobpostcourse_set.all()
-    
     if job_course_links.exists():
-        job_data['course_details'] = [
-            model_to_dict(link.course) for link in job_course_links
-        ]
+        job_data['course_details'] = [model_to_dict(link.course) for link in job_course_links]
         job_data['course_name'] = ", ".join([link.course.course_name for link in job_course_links])
     else:
         job_data['course_details'] = []
         job_data['course_name'] = "General / All Courses"
 
-    if user_profile:
-        user_score = (
-            user_profile.general_appearance + user_profile.manner_of_speaking +
-            user_profile.physical_condition + user_profile.mental_alertness +
-            user_profile.self_confidence + user_profile.ability_to_present_ideas +
-            user_profile.communication_skills + user_profile.student_performance_rating
-        )
-        job_min = (
+    if user_profile and user_score > 0:
+        job_req_sum = (
             job.min_general_appearance + job.min_manner_of_speaking +
             job.min_physical_condition + job.min_mental_alertness +
             job.min_self_confidence + job.min_ability_to_present_ideas +
             job.min_communication_skills + job.min_student_performance_rating
         )
-        if user_score > 0:
-            match_pct = int(round((job_min / user_score) * 100))
+        
+        if job_req_sum > 0:
+            match_pct = int(round((user_score / job_req_sum) * 100))
         else:
-            match_pct = 0
+            match_pct = 100
             
         job_data['match_percentage'] = min(match_pct, 100)
-        job_data['is_highly_recommended'] = match_pct >= 75
+        job_data['is_highly_recommended'] = bool(match_pct >= 75 and is_employable)
+    else:
+        job_data['match_percentage'] = 0
+        job_data['is_highly_recommended'] = False
     
     return job_data
 
@@ -179,3 +185,46 @@ def serialize_job_chat(chat, request=None):
     chat_data['from_sender'] = serialize_user_full_profile(chat.from_sender, request)
     chat_data['to_sender'] = serialize_user_full_profile(chat.to_sender, request)
     return chat_data
+
+def generate_prediction(profile, id3_model):
+    if not profile:
+        return {'is_employable': False, 'prediction_text': "No Scale Profile"}
+
+    try:
+        features = [
+            int(profile.general_appearance or 0),
+            int(profile.manner_of_speaking or 0),
+            int(profile.physical_condition or 0),
+            int(profile.mental_alertness or 0),
+            int(profile.self_confidence or 0),
+            int(profile.ability_to_present_ideas or 0),
+            int(profile.communication_skills or 0),
+            int(profile.student_performance_rating or 0)
+        ]
+    except (ValueError, TypeError):
+        return {'is_employable': False, 'prediction_text': "Invalid Data"}
+    
+    total_score = sum(features)
+    if total_score <= 24:
+        return {
+            'is_employable': False,
+            'prediction_text': "Less Employable",
+            'score_sum': total_score
+        }
+    
+    if total_score == 32:
+        return {
+            'is_employable': True,
+            'prediction_text': "Employable",
+            'score_sum': total_score
+        }
+
+    raw_prediction = id3_model.predict([features])[0]
+
+    is_employable = bool(str(raw_prediction) == "1" or raw_prediction == 1)
+
+    return {
+        'is_employable': is_employable,
+        'prediction_text': "Employable" if is_employable else "Less Employable",
+        'score_sum': int(total_score)
+    }
