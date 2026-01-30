@@ -1,0 +1,4 @@
+.notification-container:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+    cursor: pointer;
+}

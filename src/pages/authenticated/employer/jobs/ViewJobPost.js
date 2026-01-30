@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import TabTemplate from '../../components/TabTemplate';
 import JobDetails from './component/JobDetails';
 import Candidates from './component/Candidates';
@@ -7,6 +7,22 @@ import Candidates from './component/Candidates';
 const ViewJobPost = () => {
     const { jobId } = useParams();
     const [tabId, setTabId] = useState(0);
+    const [modalDefaultOpenId, setModalDefaultOpenId] = useState(null);
+    const navigate = useNavigate();
+
+    const params = new URLSearchParams(window.location.search);
+
+    useEffect(() => {
+        if (params.has('tab') && params.get('tab') === "candidates") {
+            setTabId(1);
+
+            if (params.has('modal_id')) {
+                setModalDefaultOpenId(Number(params.get('modal_id')));
+            }
+        }
+
+        return () => { };
+    }, [tabId, params]);
 
     return (
         <>
@@ -25,7 +41,13 @@ const ViewJobPost = () => {
                         index: 1
                     }
                 ]}
-                callbackFunction={(e) => setTabId(e)}
+                callbackFunction={(e) => {
+                    setTabId(e);
+
+                    if (e === 0) {
+                        navigate(`/welcome/employer/jobs/${jobId}`)
+                    }
+                }}
             />
 
             <div className="card border-0 shadow-0 mt-0 elevation-0 rounded-0 bg-transparent">
@@ -42,9 +64,9 @@ const ViewJobPost = () => {
 
                     <div role="tabpanel" hidden={tabId !== 1} id={`simple-tabpanel-1`} aria-labelledby={`simple-tab-1`}>
                         {tabId === 1 && <>
-                            <div className="card border-none shadow-none">
+                            <div className="card border-none shadow-none bg-transparent">
                                 <div className="card-body text-sm px-0">
-                                    <Candidates jobId={jobId} />
+                                    <Candidates jobId={jobId} modalDefaultOpenId={modalDefaultOpenId} />
                                 </div>
                             </div>
                         </>}

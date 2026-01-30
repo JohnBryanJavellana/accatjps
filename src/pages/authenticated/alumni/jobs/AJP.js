@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TabTemplate from '../../components/TabTemplate';
 import AJobPosts from './AJobPosts';
 import AppliedJobs from './AppliedJobs';
@@ -6,6 +6,13 @@ import AJobSavedPosts from './AJobSavedPosts';
 
 const AJP = () => {
     const [tabId, setTabId] = useState(0);
+    const params = new URLSearchParams(window.location.search);
+
+    useEffect(() => {
+        if (params.has('tab') && params.get('tab') === "applied") {
+            setTabId(2);
+        }
+    }, [params]);
 
     return (
         <>

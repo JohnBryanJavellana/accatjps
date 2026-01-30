@@ -1,11 +1,10 @@
+/* global $ */
 import axios from 'axios';
 import React, { useEffect, useMemo, useState } from 'react'
 import SkeletonLoader from '../../../components/SkeletonLoader/SkeletonLoader';
 import useGetToken from '../../../../../hooks/useGetToken';
 import useSystemURLCon from '../../../../../hooks/useSystemURLCon';
 import { useNavigate } from 'react-router-dom';
-import useDateFormat from '../../../../../hooks/useDateFormat';
-import useFormatNumber from '../../../../../hooks/useFormatNumber';
 import TablePaginationTemplate from '../../../components/TablePaginationTemplate';
 import { FormControl, IconButton, InputLabel, OutlinedInput, Stack, Tooltip } from '@mui/material';
 import ViewUser from '../../../admin/user-management/components/ViewUser';
@@ -16,15 +15,13 @@ import UpdateCandidateApplication from './components/UpdateCandidateApplication'
 import useGetCurrentUser from '../../../../../hooks/useGetCurrentUser';
 import AJobChat from '../../../alumni/jobs/components/AJobChat';
 
-const Candidates = ({ jobId, callbackFunction }) => {
+const Candidates = ({ jobId, callbackFunction, modalDefaultOpenId = null }) => {
     const { getToken } = useGetToken();
     const { url } = useSystemURLCon();
     const navigate = useNavigate();
     const { userData } = useGetCurrentUser();
     const [isFetching, setIsFetching] = useState(true);
     const [candidates, setCandidates] = useState(null);
-    const { formatDateToReadable } = useDateFormat();
-    const { FormatNumber } = useFormatNumber();
     const [modalOpenId, setModalOpenId] = useState(0);
     const [modalIndex, setModalIndex] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState('NO');
@@ -59,7 +56,17 @@ const Candidates = ({ jobId, callbackFunction }) => {
             GetJobCandidates(true);
             return () => { };
         }
+
+        return () => {
+            setCandidates([]);
+        };
     }, [jobId, userData]);
+
+    useEffect(() => {
+        if (modalDefaultOpenId) {
+            setSearchText(String(modalDefaultOpenId));
+        }
+    }, [modalDefaultOpenId]);
 
     const filteredCandidates = useMemo(() => {
         if (!searchText.trim()) return candidates;
@@ -70,6 +77,7 @@ const Candidates = ({ jobId, callbackFunction }) => {
                 candidate?.middle_name.toLowerCase().includes(term) ||
                 candidate?.last_name.toLowerCase().includes(term) ||
                 candidate?.suffix.toLowerCase().includes(term) ||
+                String(candidate?.application_id).toLowerCase().includes(term) ||
                 candidate?.ai_prediction.toLowerCase().includes(term) ||
                 candidate?.application_status.toLowerCase().includes(term);
         });
@@ -147,10 +155,10 @@ const Candidates = ({ jobId, callbackFunction }) => {
                                             <div className="card-header py-1 border border-light d-flex align-items-center justify-content-end">
                                                 <Stack spacing={2} direction="row">
                                                     <Tooltip title="Update Job Post">
-                                                        <IconButton data-toggle="modal" data-target={`#view_user_info_${job.id}`} onClick={() => {
+                                                        <IconButton data-toggle="modal" data-target={`#view_user_info_${job.application_id}`} onClick={() => {
                                                             setIsModalOpen('YES');
                                                             setModalIndex(0);
-                                                            setModalOpenId(job.id);
+                                                            setModalOpenId(job.application_id);
                                                             setModalData(job);
                                                         }} color="warning">
                                                             <AccessibilityIcon fontSize="inherit" />
@@ -158,9 +166,9 @@ const Candidates = ({ jobId, callbackFunction }) => {
                                                     </Tooltip>
 
                                                     <Tooltip title="Chat">
-                                                        <IconButton data-toggle="modal" data-target={`#job_chat_info_${job.id}`} onClick={() => {
+                                                        <IconButton data-toggle="modal" id={`job_chat_info_btn_${job.application_id}`} data-target={`#job_chat_info_${job.application_id}`} onClick={() => {
                                                             setIsModalOpen('YES');
-                                                            setModalOpenId(job.id);
+                                                            setModalOpenId(job.application_id);
                                                             setModalIndex(2);
                                                             setModalData(job);
                                                         }} color="warning">
@@ -169,10 +177,10 @@ const Candidates = ({ jobId, callbackFunction }) => {
                                                     </Tooltip>
 
                                                     <Tooltip title="Update Candidate Application Status">
-                                                        <IconButton color="success" data-toggle="modal" data-target={`#update_application_status_${job.id}`} onClick={() => {
+                                                        <IconButton color="success" data-toggle="modal" data-target={`#update_application_status_${job.application_id}`} onClick={() => {
                                                             setIsModalOpen('YES');
                                                             setModalIndex(1);
-                                                            setModalOpenId(job.id);
+                                                            setModalOpenId(job.application_id);
                                                             setModalData(job);
                                                         }}>
                                                             <EditIcon fontSize="inherit" />

@@ -8,6 +8,7 @@ import useGetCurrentUser from '../../../../../hooks/useGetCurrentUser';
 import useShowSubmitLoader from '../../../../../hooks/useShowSubmitLoader';
 import WelcomeGreeting from '../../../components/WelcomeGreeting';
 import LogoutButton from '../../../components/LogoutButton/LogoutButton';
+import CustomNotification from '../../../components/CustomNotification/CustomNotification';
 
 const EmployerMenu = () => {
     const navigate = useNavigate();
@@ -132,6 +133,8 @@ const EmployerMenu = () => {
                                             justifyContent: 'flex-end',
                                         }}>
                                             <Stack direction="row" spacing={0.5}>
+                                                <CustomNotification />
+
                                                 <IconButton color="inherit" href="https://facebook.com" target="_blank" sx={{ '&:hover': { color: '#1877F2' } }}>
                                                     <Facebook fontSize="small" />
                                                 </IconButton>
@@ -181,6 +184,8 @@ const EmployerMenu = () => {
                                 </Button>
                             ))}
                             <Box sx={{ display: 'flex', justifyContent: 'center', py: 1 }}>
+                                <CustomNotification />
+
                                 <IconButton color="inherit" href="https://facebook.com" target="_blank" sx={{ '&:hover': { color: '#1877F2' } }}>
                                     <Facebook fontSize="small" />
                                 </IconButton>

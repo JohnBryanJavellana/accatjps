@@ -600,6 +600,33 @@ const ManageAccount = () => {
                                         </Tooltip>
                                     </div>
                                 </div>
+
+                                <div className="w-100 py-3 d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <span className="d-block text-muted text-uppercase mb-1" style={{ fontSize: '0.65rem', fontWeight: '800', letterSpacing: '0.8px' }}>
+                                            AI Prediction
+                                        </span>
+                                        <div className="d-flex align-items-center">
+                                            <div
+                                                className="mr-2"
+                                                style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: userData?.is_ai_recommended ? '#28a745' : '#dc3545' }}
+                                            ></div>
+                                            <h5 className="mb-0" style={{ fontWeight: '600', color: '#334155', fontSize: '1.1rem' }}>
+                                                {userData?.ai_prediction}
+                                            </h5>
+                                        </div>
+                                    </div>
+
+                                    <div className="text-right">
+                                        <span className="d-block text-muted mb-1" style={{ fontSize: '0.65rem', fontWeight: '700' }}>
+                                            PROFILE STRENGTH
+                                        </span>
+                                        <span className="h5 mb-0" style={{ fontWeight: '300', color: '#64748b' }}>
+                                            <strong className="text-dark">{userData?.total_profile_score}</strong>
+                                            <small className="text-muted" style={{ fontSize: '0.8rem' }}> / 40</small>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
 
                             <div className="card-body p-0 text--fontPos13--xW8hS">

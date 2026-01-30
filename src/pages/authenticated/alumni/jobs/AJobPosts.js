@@ -156,9 +156,9 @@ const AJobPosts = () => {
                                                     setModalIndex(0);
                                                     setModalData(job);
                                                 }}>
-                                                    <div className="card-body text-sm">
+                                                    <div className="card-body pb-2 text-sm">
                                                         <div className="row">
-                                                            <div className="col-xl-10">
+                                                            <div className="col-xl-10 mb-2">
                                                                 <div className="row">
                                                                     <div className="col-xl-12 text-bold h5">
                                                                         {job?.title}
@@ -194,8 +194,8 @@ const AJobPosts = () => {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div className="col-xl-2 text-center">
-                                                                <img src={job?.posted_by.profile_picture} className='rounded-circle elevation-1' height={80} />
+                                                            <div className="col-xl-2 mb-2 text-center">
+                                                                <img src={job?.posted_by.profile_picture} className='elevation-1' height={80} />
                                                             </div>
                                                         </div>
                                                     </div>

@@ -11,6 +11,7 @@ import useGetToken from '../../../../../hooks/useGetToken';
 import axios from 'axios';
 import useSystemURLCon from '../../../../../hooks/useSystemURLCon';
 import LogoutButton from '../../../components/LogoutButton/LogoutButton';
+import CustomNotification from '../../../components/CustomNotification/CustomNotification';
 
 const AlumniMenu = () => {
     const navigate = useNavigate();
@@ -127,6 +128,8 @@ const AlumniMenu = () => {
                                             justifyContent: 'flex-end',
                                         }}>
                                             <Stack direction="row" spacing={0.5}>
+                                                <CustomNotification />
+
                                                 <IconButton color="inherit" href="https://facebook.com" target="_blank" sx={{ '&:hover': { color: '#1877F2' } }}>
                                                     <Facebook fontSize="small" />
                                                 </IconButton>
