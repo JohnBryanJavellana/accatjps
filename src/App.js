@@ -34,6 +34,7 @@ import AAnnouncement from "./pages/authenticated/admin/announcement/AAnnouncemen
 import NewsFeed from "./pages/authenticated/alumni/news-feed/NewsFeed";
 import EReport from "./pages/authenticated/report/EReport";
 import AlReport from "./pages/authenticated/alumni/report/AlReport";
+import ShowAllNotification from "./pages/authenticated/components/CustomNotification/ShowAllNotification";
 
 function App() {
     return (
@@ -68,6 +69,7 @@ function App() {
 
                     <Route element={<AlumniMenu />}>
                         <Route path="/welcome/alumni/" element={<Home />} />
+                        <Route path="/welcome/alumni/notifications" element={<ShowAllNotification />} />
                         <Route path="/welcome/report/" element={<AlReport />} />
                         <Route path="/welcome/news-feed/" element={<NewsFeed />} />
                         <Route path="/welcome/alumni/jobs" element={<AJP />} />
@@ -79,6 +81,7 @@ function App() {
 
                     <Route element={<EmployerMenu />}>
                         <Route path="/welcome/employer/" element={<Home />} />
+                        <Route path="/welcome/employer/notifications" element={<ShowAllNotification />} />
                         <Route path="/welcome/employer/report/" element={<EReport />} />
                         <Route path="/welcome/employer/jobs" element={<JobAds />} />
                         <Route path="/welcome/employer/jobs/:jobId" element={<ViewJobPost />} />
