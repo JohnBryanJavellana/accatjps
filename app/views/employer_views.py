@@ -256,6 +256,16 @@ def save_job_post(request):
                 course=course_instance
             )
 
+        Notification.objects.create(
+            from_user=request.user,
+            to_user=None,
+            type=Notification.Type.JOB_POST,
+            message=f"{request.user.get_full_name()} posted a new job: {job_data['title']}"
+        )
+
+        alumni_list = CustomUser.objects.filter(role=CustomUser.Role.ALUMNI)
+        broadcast_job_post(alumni_list, job_data, request.user)
+
         return JsonResponse({'success': True, 'message': 'Job post saved successfully.'}, status=201)
 
     except EducationCourse.DoesNotExist:

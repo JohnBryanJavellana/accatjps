@@ -4,6 +4,8 @@ from app.models import AlumniEducationalProfile
 from django.db.models.query import QuerySet
 import re
 import math
+from django.core.mail import get_connection, EmailMultiAlternatives
+from django.conf import settings
 
 def serialize_user_full_profile(user, request=None, id3_model=None):
     user_data = model_to_dict(user, exclude=['password', 'user_permissions', 'groups'])
@@ -228,3 +230,53 @@ def generate_prediction(profile, id3_model):
         'prediction_text': "Employable" if is_employable else "Less Employable",
         'score_sum': int(total_score)
     }
+
+def broadcast_job_post(alumni_queryset, job_data, sender):
+    job_title = job_data.get('title', 'New Position')
+    job_id = job_data.get('id', '')
+    sender_name = sender.get_full_name() or sender.username
+    
+    base_url = getattr(settings, 'EMAIL_REDIRECT', "http://localhost:3000")
+    job_link = f"{base_url}/jobs/{job_id}"
+    connection = get_connection()
+    messages = []
+
+    for alumnus in alumni_queryset:
+        greeting = f"Hi {alumnus.first_name if alumnus.first_name else 'Alumnus'},"
+        subject = f"New Job Alert: {job_title}"
+        
+        text_body = (
+            f"{greeting}\n\n{sender_name} has posted a new job: {job_title}.\n"
+            f"View details here: {job_link}\n\nBest regards,\nCareer Team"
+        )
+
+        html_body = f"""
+            <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
+                <h2>{greeting}</h2>
+                <p><strong>{sender_name}</strong> has just posted a new job opening: <strong>{job_title}</strong>.</p>
+                <p>Click the button below to view the details and apply:</p>
+                <div style="margin: 20px 0;">
+                    <a href="{job_link}" 
+                        style="background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">
+                        View Job Posting
+                    </a>
+                </div>
+                <p>Or copy this link: <a href="{job_link}">{job_link}</a></p>
+                <hr style="border: none; border-top: 1px solid #eee; margin-top: 20px;">
+                <p style="font-size: 0.8em; color: #777;">Best regards,<br>Career Support Team</p>
+            </div>
+        """
+
+        email = EmailMultiAlternatives(
+            subject=subject,
+            body=text_body,
+            from_email=settings.EMAIL_HOST_USER,
+            to=[alumnus.email],
+            connection=connection
+        )
+        email.attach_alternative(html_body, "text/html")
+        messages.append(email)
+
+    if messages:
+        return connection.send_messages(messages)
+    return 0
