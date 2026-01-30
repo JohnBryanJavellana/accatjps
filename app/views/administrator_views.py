@@ -64,10 +64,10 @@ def dashboard_data(request):
         total_alumni_count = alumni_users.count()
         unemployed_count = max(0, total_alumni_count - hired_count)
 
-        employment_stats = [
-            {'name': 'Employed', 'value': hired_count},
-            {'name': 'Unemployed', 'value': unemployed_count}
-        ]
+        employment_stats = {
+            'employed': hired_count,
+            'unemployed': unemployed_count
+        }
 
         employer_type_counts = list(
             EmployerAccount.objects.values('business_type')

@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view, permission_classes # type: ignor
 from rest_framework.permissions import IsAuthenticated, AllowAny # type: ignore
 from app.models import *
 from django.db import transaction
-from app.utils import serialize_user_full_profile, serialize_job_post, parse_custom_coords, calculate_distance
+from app.utils import *
 import joblib
 from django.db.models import Q, Count
 import os
@@ -304,15 +304,10 @@ def get_applicable_jobs(request):
             try:
                 profile = AlumniScaleProfile.objects.get(user=request.user)
                 user_courses = AlumniEducationalProfile.objects.filter(user=request.user).values_list('course_id', flat=True)
-                
-                features = [
-                    profile.general_appearance, profile.manner_of_speaking,
-                    profile.physical_condition, profile.mental_alertness,
-                    profile.self_confidence, profile.ability_to_present_ideas,
-                    profile.communication_skills, profile.student_performance_rating
-                ]
-                is_employable = id3_model.predict([features])[0]
-                prediction_text = "Employable" if is_employable == 1 else "Not Employable"
+                prediction = generate_prediction(profile=profile, id3_model=id3_model)
+
+                is_employable = prediction['is_employable']
+                prediction_text = prediction['prediction_text']
                 
                 applied_active_job_ids = AlumniJob.objects.filter(user=request.user).exclude(
                     status__in=[AlumniJob.Status.FINISHED, AlumniJob.Status.WITHDRAWN, AlumniJob.Status.REJECTED]
@@ -328,14 +323,14 @@ def get_applicable_jobs(request):
             course_filter = Q(jobpostcourse__course__in=user_courses) | Q(jobpostcourse__isnull=True)
             jobs_queryset = jobs_queryset.filter(
                 course_filter,
-                min_general_appearance__lte=profile.general_appearance,
-                min_manner_of_speaking__lte=profile.manner_of_speaking,
-                min_physical_condition__lte=profile.physical_condition,
-                min_mental_alertness__lte=profile.mental_alertness,
-                min_self_confidence__lte=profile.self_confidence,
-                min_ability_to_present_ideas__lte=profile.ability_to_present_ideas,
-                min_communication_skills__lte=profile.communication_skills,
-                min_student_performance_rating__lte=profile.student_performance_rating
+                min_general_appearance__lte=int(profile.general_appearance or 0),
+                min_manner_of_speaking__lte=int(profile.manner_of_speaking or 0),
+                min_physical_condition__lte=int(profile.physical_condition or 0),
+                min_mental_alertness__lte=int(profile.mental_alertness or 0),
+                min_self_confidence__lte=int(profile.self_confidence or 0),
+                min_ability_to_present_ideas__lte=int(profile.ability_to_present_ideas or 0),
+                min_communication_skills__lte=int(profile.communication_skills or 0),
+                min_student_performance_rating__lte=int(profile.student_performance_rating or 0)
             ).exclude(id__in=applied_active_job_ids)
 
         if search_query:
@@ -368,6 +363,7 @@ def get_applicable_jobs(request):
 
         return JsonResponse({
             'success': True, 
+            'user': list(applied_active_job_ids),
             'jobpost': jobpost_list,
             'employability_prediction': prediction_text,
             'is_employable': bool(is_employable == 1) if is_employable is not None else False,

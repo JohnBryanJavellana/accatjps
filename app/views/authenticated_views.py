@@ -16,13 +16,21 @@ from django.db import transaction
 from app.utils import *
 from django.db.models import Exists, OuterRef, Q
 
+import joblib
+import warnings
+from sklearn.exceptions import InconsistentVersionWarning
+
+warnings.filterwarnings("ignore", category=InconsistentVersionWarning)
+MODEL_PATH = os.path.join(settings.BASE_DIR, "id3_model.pkl")
+id3_model = joblib.load(MODEL_PATH)
+
 @api_view(['GET'])
 @transaction.atomic
 @permission_classes([IsAuthenticated])
 def get_current_user(request):
     try:
         user = request.user
-        user_data = serialize_user_full_profile(user)
+        user_data = serialize_user_full_profile(user, id3_model=id3_model)
         return JsonResponse({ 'user_info': user_data }, status=200)
         
     except Exception as e:
@@ -37,6 +45,80 @@ def get_courses(request):
         data = serialize_course(all_courses)
         
         return JsonResponse({ 'courses': data }, status=200)
+    except Exception as e:
+        return JsonResponse({"message": str(e)}, status=400)
+    
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def get_notifications(request):
+    try:
+        limit = request.data.get('limit')
+        user = request.user
+        
+        viewer_exists = NotificationViewer.objects.filter(
+            user=user, 
+            notification=OuterRef('pk')
+        )
+
+        base_query = Notification.objects.select_related('from_user', 'to_user').annotate(
+            user_has_read=Exists(viewer_exists)
+        ).exclude(from_user=user)
+
+        if user.role == CustomUser.Role.ALUMNI:
+            scale = user.alumniscaleprofile_set.first()
+            is_ai_employable = False
+            if scale:
+                prediction = generate_prediction(profile=scale, id3_model=id3_model)
+                is_ai_employable = prediction.get('is_employable', False)
+
+            if is_ai_employable:
+                notifications = base_query.filter(
+                    Q(type=Notification.Type.JOB_POST, to_user=None) | Q(to_user=user)
+                )
+            else:
+                notifications = base_query.filter(to_user=user).exclude(type=Notification.Type.JOB_POST)
+
+        elif user.role == CustomUser.Role.EMPLOYER:
+            notifications = base_query.filter(Q(type=Notification.Type.JOB_POST, from_user=user) | Q(to_user=user))
+        elif user.role == CustomUser.Role.ADMINISTRATOR:
+            notifications = base_query.filter(Q(type=Notification.Type.JOB_POST))
+        else:
+            notifications = base_query.none()
+
+        notifications = notifications.order_by('-created_at')
+        if limit:
+            notifications = notifications[:int(limit)]
+
+        serialized_data = []
+        for n in notifications:
+            data = serialize_notifications(n, request)
+            data['is_read'] = n.user_has_read
+            serialized_data.append(data)
+
+        return JsonResponse({'notifications': serialized_data}, status=200)
+
+    except Exception as e:
+        return JsonResponse({"message": str(e)}, status=400)
+    
+@api_view(['POST'])
+@transaction.atomic
+@permission_classes([IsAuthenticated])
+def update_notification(request):
+    try:
+        notification_id = request.data.get('notificationId') 
+        
+        if not notification_id:
+            return JsonResponse({"message": "ID missing"}, status=400)
+
+        notification = Notification.objects.get(id=notification_id)
+        NotificationViewer.objects.get_or_create(
+            user=request.user,
+            notification=notification
+        )
+
+        return JsonResponse({'message': 'Notification marked as read!'}, status=200)
+    except Notification.DoesNotExist:
+        return JsonResponse({"message": "Notification not found"}, status=404)
     except Exception as e:
         return JsonResponse({"message": str(e)}, status=400)
     
@@ -79,6 +161,13 @@ def submit_job_chat(request):
             from_sender = CustomUser.objects.get(id=from_sender_id),
             to_sender = CustomUser.objects.get(id=to_sender_id),
             message=message
+        )
+
+        Notification.objects.create(
+            from_user=CustomUser.objects.get(id=from_sender_id),
+            to_user=CustomUser.objects.get(id=to_sender_id),
+            type=Notification.Type.CHAT,
+            message=f"{request.user.get_full_name()} submitted a chat: {message}"
         )
 
         return JsonResponse({'success': True, 'message': "Chat Added." }, status=200)

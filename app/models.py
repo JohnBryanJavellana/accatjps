@@ -214,3 +214,24 @@ class History(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     action = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
+
+class Notification(models.Model):
+    class Type(models.TextChoices):
+        CHAT = 'CHAT',
+        JOB_POST = 'JOB_POST'
+
+    from_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="from_user", null=True, blank=True)
+    to_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="to_user", null=True, blank=True)
+    type = models.CharField(max_length=255, default=Type.CHAT, choices=Type.choices)
+    message = models.TextField(null=True, blank=True)
+    redirect_id = models.IntegerField(null=True, blank=True)
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+class NotificationViewer(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
+    notification = models.ForeignKey(Notification, on_delete=models.CASCADE, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
