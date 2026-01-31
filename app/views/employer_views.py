@@ -259,6 +259,7 @@ def save_job_post(request):
         Notification.objects.create(
             from_user=request.user,
             to_user=None,
+            job=job_obj,
             type=Notification.Type.JOB_POST,
             message=f"{request.user.get_full_name()} posted a new job: {job_data['title']}"
         )

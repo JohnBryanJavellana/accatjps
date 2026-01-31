@@ -222,6 +222,7 @@ class Notification(models.Model):
 
     from_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="from_user", null=True, blank=True)
     to_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="to_user", null=True, blank=True)
+    job = models.ForeignKey(JobPost, on_delete=models.CASCADE, related_name="to_user", null=True, blank=True)
     type = models.CharField(max_length=255, default=Type.CHAT, choices=Type.choices)
     message = models.TextField(null=True, blank=True)
     redirect_id = models.IntegerField(null=True, blank=True)

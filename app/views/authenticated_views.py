@@ -54,13 +54,9 @@ def get_notifications(request):
     try:
         limit = request.data.get('limit')
         user = request.user
-        
-        viewer_exists = NotificationViewer.objects.filter(
-            user=user, 
-            notification=OuterRef('pk')
-        )
-
-        base_query = Notification.objects.select_related('from_user', 'to_user').annotate(
+    
+        viewer_exists = NotificationViewer.objects.filter(user=user, notification=OuterRef('pk'))
+        base_query = Notification.objects.select_related('from_user', 'to_user', 'job').annotate(
             user_has_read=Exists(viewer_exists)
         ).exclude(from_user=user)
 
@@ -72,22 +68,30 @@ def get_notifications(request):
                 is_ai_employable = prediction.get('is_employable', False)
 
             if is_ai_employable:
-                notifications = base_query.filter(
-                    Q(type=Notification.Type.JOB_POST, to_user=None) | Q(to_user=user)
-                )
+                edu_profile = user.alumnieducationalprofile_set.first()
+                if edu_profile and edu_profile.course:
+                    relevant_job_ids = JobPostCourse.objects.filter(course=edu_profile.course).values_list('job_id', flat=True)
+                    notifications = base_query.filter(
+                        Q(to_user=user) | 
+                        Q(type=Notification.Type.JOB_POST, to_user=None, job_id__in=relevant_job_ids)
+                    )
+                else:
+                    notifications = base_query.filter(to_user=user).exclude(type=Notification.Type.JOB_POST)
             else:
                 notifications = base_query.filter(to_user=user).exclude(type=Notification.Type.JOB_POST)
 
         elif user.role == CustomUser.Role.EMPLOYER:
-            notifications = base_query.filter(Q(type=Notification.Type.JOB_POST, from_user=user) | Q(to_user=user))
-        elif user.role == CustomUser.Role.ADMINISTRATOR:
-            notifications = base_query.filter(Q(type=Notification.Type.JOB_POST))
-        else:
-            notifications = base_query.none()
+            notifications = base_query.filter(Q(to_user=user) | Q(type=Notification.Type.JOB_POST, from_user=user))
+
+        elif user.role == CustomUser.Role.ADMINISTRATOR: notifications = base_query.all()
+        else: notifications = base_query.none()
 
         notifications = notifications.order_by('-created_at')
         if limit:
-            notifications = notifications[:int(limit)]
+            try:
+                notifications = notifications[:int(limit)]
+            except (ValueError, TypeError):
+                pass
 
         serialized_data = []
         for n in notifications:
