@@ -261,7 +261,7 @@ def save_job_post(request):
             to_user=None,
             job=job_obj,
             type=Notification.Type.JOB_POST,
-            message=f"You havea new job recommendation from {request.user.get_full_name()}: {job_data['title']}"
+            message=f"You have a new job recommendation from {request.user.get_full_name()}: {job_data['title']}"
         )
 
         alumni_list = CustomUser.objects.filter(role=CustomUser.Role.ALUMNI)
