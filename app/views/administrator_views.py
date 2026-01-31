@@ -241,7 +241,7 @@ def update_document_status(request):
         send_mail(
             subject,
             message,
-            settings.DEFAULT_FROM_EMAIL,
+            settings.EMAIL_HOST_USER,
             [user.email],
             fail_silently=False
         )
