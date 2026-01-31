@@ -99,7 +99,7 @@ const EmployerMenu = () => {
                                             alignItems: 'center',
                                             justifyContent: 'flex-end',
                                         }}>
-                                            <CustomNotification />
+                                            <CustomNotification limit={3} />
 
                                             <IconButton color="inherit" onClick={toggleMenu}>
                                                 <Dehaze fontSize="small" />
@@ -135,7 +135,7 @@ const EmployerMenu = () => {
                                             justifyContent: 'flex-end',
                                         }}>
                                             <Stack direction="row" spacing={0.5}>
-                                                <CustomNotification />
+                                                <CustomNotification limit={3} />
 
                                                 <IconButton color="inherit" href="https://facebook.com" target="_blank" sx={{ '&:hover': { color: '#1877F2' } }}>
                                                     <Facebook fontSize="small" />
