@@ -111,7 +111,7 @@ const Notification = ({ limit = null, onMainPage = false, callbackFunction = () 
             }
 
             {
-                isFetching
+                isFetching && !userData
                     ? <SkeletonLoader className='w-100' onViewMode={'update'} />
                     : <>
                         {
@@ -125,11 +125,11 @@ const Notification = ({ limit = null, onMainPage = false, callbackFunction = () 
 
                                                     switch (notification.type) {
                                                         case "JOB_POST":
-                                                            designation = `/welcome/${String(userData?.role).toLowerCase()}/jobs`;
+                                                            designation = `/welcome/${String(userData.role).toLowerCase()}/jobs`;
                                                             break;
 
                                                         case "CHAT":
-                                                            designation = userData?.role === "ALUMNI" ? `/welcome/alumni/jobs?tab=applied` : `/welcome/employer/jobs/${notification.redirect_id}?tab=candidates&modal_id=${notification.redirect_id}`;
+                                                            designation = userData.role === "ALUMNI" ? `/welcome/alumni/jobs?tab=applied` : `/welcome/employer/jobs/${notification.redirect_id}?tab=candidates&modal_id=${notification.redirect_id}`;
                                                             break;
 
                                                         default:
