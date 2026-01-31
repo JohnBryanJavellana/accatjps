@@ -12,7 +12,7 @@ const AJP = () => {
         if (params.has('tab') && params.get('tab') === "applied") {
             setTabId(2);
         }
-    }, [params]);
+    }, [params, tabId]);
 
     return (
         <>
