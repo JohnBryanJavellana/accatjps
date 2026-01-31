@@ -132,7 +132,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'projects.gdrive.only@gmail.com'
-EMAIL_HOST_PASSWORD = 'tlsr mhjt abhc pava'
+EMAIL_HOST_PASSWORD = 'faiy iemz ppri smza'
 EMAIL_REDIRECT = "https://accatjps.online"
 
 # CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"]
