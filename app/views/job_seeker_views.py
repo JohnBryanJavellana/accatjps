@@ -442,6 +442,13 @@ def apply_job(request):
             fail_silently=True
         )
 
+        Notification.objects.create(
+            from_user=request.user,
+            to_user=employer,
+            type=Notification.Type.JOB_POST,
+            message=f"{alumni_name} has applied for the position of '{job.title}'."
+        )
+
         return JsonResponse({
             'success': True, 
             'message': "Application submitted successfully!" 
