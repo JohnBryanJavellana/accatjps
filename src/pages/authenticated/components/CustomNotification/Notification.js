@@ -12,7 +12,7 @@ import SkeletonLoader from '../SkeletonLoader/SkeletonLoader';
 import TablePaginationTemplate from '../TablePaginationTemplate';
 import './Notification.css';
 
-const Notification = ({ limit = null, onMainPage = false, callbackFunction }) => {
+const Notification = ({ limit = null, onMainPage = false, callbackFunction = () => { } }) => {
     const { removeToken, getToken } = useGetToken();
     const navigate = useNavigate();
     const { url, urlWithoutToken } = useSystemURLCon();
@@ -49,6 +49,8 @@ const Notification = ({ limit = null, onMainPage = false, callbackFunction }) =>
             setNotifications(response.data.notifications);
             setFilteredNotifications(response.data.notifications);
         } catch (error) {
+            return console.log(error);
+
             error.response.data.status === 500
                 ? navigate('/access-denied')
                 : alert(error.response.data.message);

@@ -212,7 +212,7 @@ const AppliedJobs = () => {
                                                         </div>
                                                     </div>
                                                     <div className="col-xl-2 text-center">
-                                                        <img src={job?.posted_by.profile_picture} className='rounded-circle elevation-1' height={80} />
+                                                        <img src={job?.posted_by.profile_picture} className='shadow-sm' height={80} />
                                                     </div>
                                                 </div>
                                             </div>

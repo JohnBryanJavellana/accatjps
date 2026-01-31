@@ -5,11 +5,11 @@ const ShowAllNotification = () => {
         <>
             <section className="content my-2">
                 <div className="">
-                    <h6 className='text-bold'>Notifications</h6>
+                    <h4 className='text-bold'>Notifications</h4>
                 </div>
             </section>
 
-            <section className="content">
+            <section className="content mt-3">
                 <div className="">
                     <div className="card elevation-0 border-0 bg-white">
                         <div className="card-body">

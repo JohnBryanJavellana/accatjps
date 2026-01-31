@@ -616,16 +616,6 @@ const ManageAccount = () => {
                                             </h5>
                                         </div>
                                     </div>
-
-                                    <div className="text-right">
-                                        <span className="d-block text-muted mb-1" style={{ fontSize: '0.65rem', fontWeight: '700' }}>
-                                            PROFILE STRENGTH
-                                        </span>
-                                        <span className="h5 mb-0" style={{ fontWeight: '300', color: '#64748b' }}>
-                                            <strong className="text-dark">{userData?.total_profile_score}</strong>
-                                            <small className="text-muted" style={{ fontSize: '0.8rem' }}> / 40</small>
-                                        </span>
-                                    </div>
                                 </div>
                             </div>
 

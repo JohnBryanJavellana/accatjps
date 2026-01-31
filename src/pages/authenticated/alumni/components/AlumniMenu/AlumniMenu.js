@@ -94,6 +94,8 @@ const AlumniMenu = () => {
                                             alignItems: 'center',
                                             justifyContent: 'flex-end',
                                         }}>
+                                            <CustomNotification />
+
                                             <IconButton color="inherit" onClick={toggleMenu}>
                                                 <Dehaze fontSize="small" />
                                             </IconButton>
@@ -179,8 +181,6 @@ const AlumniMenu = () => {
                                 </Button>
                             ))}
                             <Box sx={{ display: 'flex', justifyContent: 'center', py: 1 }}>
-                                <CustomNotification />
-
                                 <IconButton color="inherit" href="https://facebook.com" target="_blank" sx={{ '&:hover': { color: '#1877F2' } }}>
                                     <Facebook fontSize="small" />
                                 </IconButton>
