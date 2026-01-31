@@ -154,6 +154,7 @@ def submit_job_chat(request):
     try:
         message = request.POST.get('message')
         job_id = request.POST.get('job_id')
+        main_job_id = request.POST.get('main_job_id')
         from_sender_id = request.POST.get('from_sender_id')
         to_sender_id = request.POST.get('to_sender_id')
 
@@ -170,6 +171,7 @@ def submit_job_chat(request):
         Notification.objects.create(
             from_user=CustomUser.objects.get(id=from_sender_id),
             to_user=CustomUser.objects.get(id=to_sender_id),
+            job=JobPost.objects.get(id=main_job_id),
             redirect_id=job_id,
             type=Notification.Type.CHAT,
             message=f"{request.user.get_full_name()} submitted a chat: {message}"
