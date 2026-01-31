@@ -32,7 +32,6 @@ const Notification = ({ limit = null, onMainPage = false, callbackFunction = () 
             GetNotifications(true);
 
             let r = String(userData?.role).toLowerCase();
-            alert(r);
             setRole(r);
             return () => { };
         }
@@ -130,7 +129,7 @@ const Notification = ({ limit = null, onMainPage = false, callbackFunction = () 
                                                             break;
 
                                                         case "CHAT":
-                                                            designation = role === "alumni" ? `/welcome/${role}/jobs?tab=applied` : `/welcome/${role}/jobs/${notification.redirect_id}?tab=candidates&modal_id=${notification.redirect_id}`;
+                                                            designation = userData?.role === "ALUMNI" ? `/welcome/alumni/jobs?tab=applied` : `/welcome/employer/jobs/${notification.redirect_id}?tab=candidates&modal_id=${notification.redirect_id}`;
                                                             break;
 
                                                         default:
