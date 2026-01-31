@@ -30,7 +30,7 @@ const Notification = ({ limit = null, onMainPage = false, callbackFunction = () 
     useEffect(() => {
         if (userData) {
             GetNotifications(true);
-            setRole(userData?.role);
+            setRole(String(userData?.role).toLocaleLowerCase());
             return () => { };
         }
     }, [userData]);

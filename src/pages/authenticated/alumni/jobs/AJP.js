@@ -3,16 +3,18 @@ import TabTemplate from '../../components/TabTemplate';
 import AJobPosts from './AJobPosts';
 import AppliedJobs from './AppliedJobs';
 import AJobSavedPosts from './AJobSavedPosts';
+import { useNavigate } from 'react-router-dom';
 
 const AJP = () => {
     const [tabId, setTabId] = useState(0);
     const params = new URLSearchParams(window.location.search);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (params.has('tab') && params.get('tab') === "applied") {
             setTabId(2);
         }
-    }, []);
+    }, [params]);
 
     return (
         <>
@@ -35,7 +37,10 @@ const AJP = () => {
                         index: 2
                     }
                 ]}
-                callbackFunction={(e) => setTabId(e)}
+                callbackFunction={(e) => {
+                    navigate(`/welcome/alumni/jobs`);
+                    setTabId(e);
+                }}
             />
 
             <div className="card border-0 shadow-0 mt-0 elevation-0 rounded-0 bg-transparent">
