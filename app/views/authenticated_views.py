@@ -60,20 +60,27 @@ def get_notifications(request):
             notification=OuterRef('pk')
         )
 
-        base_query = Notification.objects.select_related('from_user', 'to_user').annotate(
+        base_query = Notification.objects.select_related('from_user', 'to_user', 'related_job').annotate(
             user_has_read=Exists(viewer_exists)
         ).exclude(from_user=user)
 
         if user.role == CustomUser.Role.ALUMNI:
+            edu_profile = user.alumnieducationalprofile_set.first()
             scale = user.alumniscaleprofile_set.first()
+            
             is_ai_employable = False
             if scale:
                 prediction = generate_prediction(profile=scale, id3_model=id3_model)
                 is_ai_employable = prediction.get('is_employable', False)
 
-            if is_ai_employable:
+            if is_ai_employable and edu_profile:
+                relevant_job_ids = JobPostCourse.objects.filter(
+                    course=edu_profile.course
+                ).values_list('job_id', flat=True)
+
                 notifications = base_query.filter(
-                    Q(type=Notification.Type.JOB_POST, to_user=None) | Q(to_user=user)
+                    Q(to_user=user) | 
+                    Q(type=Notification.Type.JOB_POST, related_job_id__in=relevant_job_ids, to_user=None)
                 )
             else:
                 notifications = base_query.filter(to_user=user).exclude(type=Notification.Type.JOB_POST)
@@ -81,7 +88,7 @@ def get_notifications(request):
         elif user.role == CustomUser.Role.EMPLOYER:
             notifications = base_query.filter(Q(type=Notification.Type.JOB_POST, from_user=user) | Q(to_user=user))
         elif user.role == CustomUser.Role.ADMINISTRATOR:
-            notifications = base_query.filter(Q(type=Notification.Type.JOB_POST))
+            notifications = base_query.all()
         else:
             notifications = base_query.none()
 
