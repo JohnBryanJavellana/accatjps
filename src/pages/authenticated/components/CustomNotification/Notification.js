@@ -125,7 +125,7 @@ const Notification = ({ limit = null, onMainPage = false, callbackFunction = () 
 
                                                     switch (notification.type) {
                                                         case "JOB_POST":
-                                                            designation = `/welcome/${role}/jobs`;
+                                                            designation = `/welcome/${String(userData?.role).toLowerCase()}/jobs`;
                                                             break;
 
                                                         case "CHAT":
