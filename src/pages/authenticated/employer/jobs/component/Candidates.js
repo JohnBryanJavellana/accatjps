@@ -21,7 +21,7 @@ const Candidates = ({ jobId, callbackFunction, modalDefaultOpenId = null }) => {
     const navigate = useNavigate();
     const { userData } = useGetCurrentUser();
     const [isFetching, setIsFetching] = useState(true);
-    const [candidates, setCandidates] = useState(null);
+    const [candidates, setCandidates] = useState([]);
     const [modalOpenId, setModalOpenId] = useState(0);
     const [modalIndex, setModalIndex] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState('NO');
@@ -69,6 +69,8 @@ const Candidates = ({ jobId, callbackFunction, modalDefaultOpenId = null }) => {
     }, [modalDefaultOpenId]);
 
     const filteredCandidates = useMemo(() => {
+        if (!candidates) return [];
+
         if (!searchText.trim()) return candidates;
         const term = searchText.toLowerCase();
 
@@ -77,7 +79,7 @@ const Candidates = ({ jobId, callbackFunction, modalDefaultOpenId = null }) => {
                 candidate?.middle_name.toLowerCase().includes(term) ||
                 candidate?.last_name.toLowerCase().includes(term) ||
                 candidate?.suffix.toLowerCase().includes(term) ||
-                // String(candidate?.application_id).toLowerCase().includes(term) ||
+                String(candidate?.application_id).toLowerCase().includes(term) ||
                 candidate?.ai_prediction.toLowerCase().includes(term) ||
                 candidate?.application_status.toLowerCase().includes(term);
         });
