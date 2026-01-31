@@ -11,7 +11,16 @@ from django.db import transaction
 from django.db.models import Count, Q
 from django.db.models.functions import TruncYear
 
+import joblib
+import warnings
+from sklearn.exceptions import InconsistentVersionWarning
+import os
+
 User = get_user_model()
+
+warnings.filterwarnings("ignore", category=InconsistentVersionWarning)
+MODEL_PATH = os.path.join(settings.BASE_DIR, "id3_model.pkl")
+id3_model = joblib.load(MODEL_PATH)
 
 @api_view(['GET'])
 @transaction.atomic
@@ -29,7 +38,7 @@ def get_users(request):
         )
         
         users_list = [
-            serialize_user_full_profile(user, request) 
+            serialize_user_full_profile(user, request, id3_model) 
             for user in users_queryset
         ]
         
