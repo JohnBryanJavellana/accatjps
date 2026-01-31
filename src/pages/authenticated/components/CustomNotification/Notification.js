@@ -24,12 +24,15 @@ const Notification = ({ limit = null, onMainPage = false, callbackFunction = () 
 
     const [rowsPerPage, setRowsPerPage] = useState(20);
     const [page, setPage] = useState(0);
-    const role = String(userData?.role).toLowerCase();
+    const [role, setRole] = useState('');
     const { SubmitLoadingAnim, setShowLoader, setProgress, setMethod } = useShowSubmitLoader();
 
     useEffect(() => {
-        GetNotifications(true);
-        return () => { };
+        if (userData) {
+            GetNotifications(true);
+            setRole(userData?.role);
+            return () => { };
+        }
     }, [userData]);
 
     const GetNotifications = async (isInitialLoad) => {
