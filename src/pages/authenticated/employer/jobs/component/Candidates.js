@@ -77,7 +77,7 @@ const Candidates = ({ jobId, callbackFunction, modalDefaultOpenId = null }) => {
                 candidate?.middle_name.toLowerCase().includes(term) ||
                 candidate?.last_name.toLowerCase().includes(term) ||
                 candidate?.suffix.toLowerCase().includes(term) ||
-                String(candidate?.application_id).toLowerCase().includes(term) ||
+                // String(candidate?.application_id).toLowerCase().includes(term) ||
                 candidate?.ai_prediction.toLowerCase().includes(term) ||
                 candidate?.application_status.toLowerCase().includes(term);
         });
