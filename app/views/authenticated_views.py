@@ -170,6 +170,7 @@ def submit_job_chat(request):
         Notification.objects.create(
             from_user=CustomUser.objects.get(id=from_sender_id),
             to_user=CustomUser.objects.get(id=to_sender_id),
+            redirect_id=job_id,
             type=Notification.Type.CHAT,
             message=f"{request.user.get_full_name()} submitted a chat: {message}"
         )
