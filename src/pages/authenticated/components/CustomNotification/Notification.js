@@ -129,7 +129,7 @@ const Notification = ({ limit = null, onMainPage = false, callbackFunction = () 
                                                             break;
 
                                                         case "CHAT":
-                                                            designation = userData.role === "ALUMNI" ? `/welcome/alumni/jobs?tab=applied` : `/welcome/employer/jobs/${notification.redirect_id}?tab=candidates&modal_id=${notification.redirect_id}`;
+                                                            designation = userData.role === "ALUMNI" ? `/welcome/alumni/jobs?tab=applied` : `/welcome/employer/jobs/${notification.job}?tab=candidates&modal_id=${notification.redirect_id}`;
                                                             break;
 
                                                         default:
