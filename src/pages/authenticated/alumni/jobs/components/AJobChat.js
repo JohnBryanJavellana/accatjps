@@ -38,6 +38,7 @@ const AJobChat = ({ id, data, modalTitle, callbackFunction, fromSenderId, toSend
             const token = getToken('access_token');
             const formData = new FormData();
             formData.append('job_id', data?.application_id);
+            formData.append('main_job_id', data?.id);
 
             const response = await axios.post(`${url}/authenticated/get-job-chats`, formData, {
                 headers: {
