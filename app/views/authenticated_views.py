@@ -73,28 +73,35 @@ def get_notifications(request):
                 prediction = generate_prediction(profile=scale, id3_model=id3_model)
                 is_ai_employable = prediction.get('is_employable', False)
 
-            if is_ai_employable and edu_profile:
-                relevant_job_ids = JobPostCourse.objects.filter(
-                    course=edu_profile.course
-                ).values_list('job_id', flat=True)
+            if is_ai_employable:
+                if edu_profile and edu_profile.course:
+                    relevant_job_ids = JobPostCourse.objects.filter(
+                        course=edu_profile.course
+                    ).values_list('job_id', flat=True)
 
-                notifications = base_query.filter(
-                    Q(to_user=user) | 
-                    Q(type=Notification.Type.JOB_POST, related_job_id__in=relevant_job_ids, to_user=None)
-                )
+                    notifications = base_query.filter(
+                        Q(to_user=user) | 
+                        Q(type=Notification.Type.JOB_POST, related_job_id__in=relevant_job_ids, to_user=None)
+                    )
+                else:
+                    notifications = base_query.filter(Q(to_user=user) | Q(type=Notification.Type.JOB_POST, to_user=None))
             else:
                 notifications = base_query.filter(to_user=user).exclude(type=Notification.Type.JOB_POST)
 
         elif user.role == CustomUser.Role.EMPLOYER:
             notifications = base_query.filter(Q(type=Notification.Type.JOB_POST, from_user=user) | Q(to_user=user))
+
         elif user.role == CustomUser.Role.ADMINISTRATOR:
             notifications = base_query.all()
         else:
             notifications = base_query.none()
-
         notifications = notifications.order_by('-created_at')
+        
         if limit:
-            notifications = notifications[:int(limit)]
+            try:
+                notifications = notifications[:int(limit)]
+            except (ValueError, TypeError):
+                pass
 
         serialized_data = []
         for n in notifications:
