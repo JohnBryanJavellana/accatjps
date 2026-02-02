@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Application definition
 
 INSTALLED_APPS = [
@@ -133,11 +133,11 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'projects.gdrive.only@gmail.com'
 EMAIL_HOST_PASSWORD = 'bkgv zszm lwfa ztdb'
-EMAIL_REDIRECT = "http://127.0.0.1:3001"
+EMAIL_REDIRECT = "https://accatjps.online"
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3001", "http://127.0.0.1:3001"]
-# CORS_ALLOWED_ORIGINS = ["https://accatjps.online", 'https://www.accatjps.online']
-# CSRF_TRUSTED_ORIGINS = ['https://accatjps.online', 'https://www.accatjps.online']
+# CORS_ALLOWED_ORIGINS = ["http://localhost:3001", "http://127.0.0.1:3001"]
+CORS_ALLOWED_ORIGINS = ["https://accatjps.online", 'https://www.accatjps.online']
+CSRF_TRUSTED_ORIGINS = ['https://accatjps.online', 'https://www.accatjps.online']
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
