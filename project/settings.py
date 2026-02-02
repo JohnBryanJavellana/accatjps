@@ -135,7 +135,7 @@ EMAIL_HOST_USER = 'projects.gdrive.only@gmail.com'
 EMAIL_HOST_PASSWORD = 'bkgv zszm lwfa ztdb'
 EMAIL_REDIRECT = "https://accatjps.online"
 
-# CORS_ALLOWED_ORIGINS = ["http://localhost:3001", "http://127.0.0.1:3001"]
+# CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"]
 CORS_ALLOWED_ORIGINS = ["https://accatjps.online", 'https://www.accatjps.online']
 CSRF_TRUSTED_ORIGINS = ['https://accatjps.online', 'https://www.accatjps.online']
 
