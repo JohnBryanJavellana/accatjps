@@ -4,13 +4,12 @@ import { AppBar, Toolbar, Typography, Box, Stack, Button, useMediaQuery, useThem
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { Facebook, YouTube, Email, Dehaze } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
+import DetectMobileViewport from '../../../../hooks/DetectMobileViewport';
 
 const GuestWrapper = ({ authenticated = false }) => {
     const navigate = useNavigate();
     const location = useLocation();
-    const isTouch = useMediaQuery('(pointer: coarse)');
-    const theme = useTheme();
-    const isMobileView = useMediaQuery(theme.breakpoints.down('md'));
+    const isMobileViewport = DetectMobileViewport();
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -51,7 +50,7 @@ const GuestWrapper = ({ authenticated = false }) => {
                     <div className="container">
                         <Toolbar disableGutters>
                             {
-                                isTouch || isMobileView
+                                isMobileViewport
                                     ? <div className='mx-1' style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
                                         <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
                                             <Box
@@ -121,7 +120,7 @@ const GuestWrapper = ({ authenticated = false }) => {
             </Box>
 
             {
-                (isMobileView || isTouch) &&
+                (isMobileViewport) &&
                 <Collapse in={isMenuOpen} timeout="auto" unmountOnExit>
                     <Box sx={{
                         position: 'fixed',
@@ -168,9 +167,9 @@ const GuestWrapper = ({ authenticated = false }) => {
 
 
             <AppBar position="static" elevation={0} color='success' style={{ borderBottom: '5px solid #D6A73D', marginTop: '65px' }}>
-                <div className={`container d-flex align-items-center my-3 ${isMobileView ? 'justify-content-center' : ''}`}>
+                <div className={`container d-flex align-items-center my-3 ${isMobileViewport ? 'justify-content-center' : ''}`}>
                     {
-                        isTouch || isMobileView
+                        isMobileViewport
                             ? <div className='text-center' style={{ width: '100%' }}>
                                 <img src='/system-images/logo.png' height={70} alt="Logo" />
                                 <div style={{

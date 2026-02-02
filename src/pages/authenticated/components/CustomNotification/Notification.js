@@ -11,6 +11,7 @@ import useSystemURLCon from '../../../../hooks/useSystemURLCon';
 import SkeletonLoader from '../SkeletonLoader/SkeletonLoader';
 import TablePaginationTemplate from '../TablePaginationTemplate';
 import './Notification.css';
+import DetectMobileViewport from '../../../../hooks/DetectMobileViewport';
 
 const Notification = ({ limit = null, onMainPage = false, callbackFunction = () => { } }) => {
     const { removeToken, getToken } = useGetToken();
@@ -21,7 +22,7 @@ const Notification = ({ limit = null, onMainPage = false, callbackFunction = () 
     const [filteredNotifications, setFilteredNotifications] = useState([]);
     const { formatDateToReadable } = useDateFormat();
     const { userData } = useGetCurrentUser();
-
+    const isMobileViewport = DetectMobileViewport();
     const [rowsPerPage, setRowsPerPage] = useState(20);
     const [page, setPage] = useState(0);
     const [role, setRole] = useState('');
@@ -139,11 +140,11 @@ const Notification = ({ limit = null, onMainPage = false, callbackFunction = () 
 
                                                     SetAsRead(notification.id, !notification.is_read, designation);
                                                 }} key={index}>
-                                                    <div className={`col-xl-${!onMainPage ? '3' : '1'} text-center`}>
+                                                    <div className={`col-xl-${!onMainPage || isMobileViewport ? '3' : '1'} text-center`}>
                                                         <img className='rounded-circle elevation-1' height={50} width={50} src={notification.from_user.profile_picture} alt='' />
                                                     </div>
 
-                                                    <div className={`text-${notification.is_read ? 'muted' : 'dark'} col-xl-${!onMainPage ? '9' : '11'}`}>
+                                                    <div className={`text-${notification.is_read ? 'muted' : 'dark'} col-xl-${!onMainPage || isMobileViewport ? '9' : '11'}`}>
                                                         <div style={{ lineHeight: '20px' }}>
                                                             <strong>{`${notification.from_user.fname ?? ''} ${notification.from_user.mname ?? ''} ${notification.from_user.lname ?? ''} ${notification.from_user.suffix ?? ''}`}</strong> {notification.message}
                                                         </div>
@@ -173,7 +174,7 @@ const Notification = ({ limit = null, onMainPage = false, callbackFunction = () 
                                                     rowsPerPage={rowsPerPage}
                                                     rowsPerPageOptions={[20, 50, 100]}
                                                     page={page}
-                                                    labelRowsPerPage={"Notifications per page:"}
+                                                    labelRowsPerPage={"Rows per page:"}
                                                     callbackFunction={(e) => {
                                                         setRowsPerPage(e.rows);
                                                         setPage(e.page);
