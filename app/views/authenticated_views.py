@@ -148,39 +148,44 @@ def get_job_chats(request):
     
 @api_view(['POST'])
 @transaction.atomic
-@transaction.atomic
 @permission_classes([IsAuthenticated])
 def submit_job_chat(request):
     try:
-        message = request.POST.get('message')
-        job_id = request.POST.get('job_id')
-        main_job_id = request.POST.get('main_job_id')
-        from_sender_id = request.POST.get('from_sender_id')
-        to_sender_id = request.POST.get('to_sender_id')
+        message = request.data.get('message')
+        job_id = request.data.get('job_id')
+        to_sender_id = request.data.get('to_sender_id')
 
-        if not message or not job_id:
-            return JsonResponse({'success': False, "message": "No data added."}, status=422)
+        if not message or not job_id or not to_sender_id:
+            return JsonResponse({'success': False, "message": "Missing required data."}, status=422)
+        
+        try:
+            alumni_job_app = AlumniJob.objects.select_related('job').get(id=job_id)
+        except AlumniJob.DoesNotExist:
+            return JsonResponse({'success': False, "message": "Job application not found."}, status=404)
+
+        sender = request.user
+        receiver = CustomUser.objects.get(id=to_sender_id)
         
         JobChat.objects.create(
-            job=AlumniJob.objects.get(id=job_id),
-            from_sender = CustomUser.objects.get(id=from_sender_id),
-            to_sender = CustomUser.objects.get(id=to_sender_id),
+            job=alumni_job_app,
+            from_sender=sender,
+            to_sender=receiver,
             message=message
         )
 
         Notification.objects.create(
-            from_user=CustomUser.objects.get(id=from_sender_id),
-            to_user=CustomUser.objects.get(id=to_sender_id),
-            job=JobPost.objects.get(id=main_job_id),
+            from_user=sender,
+            to_user=receiver,
+            job=alumni_job_app.job,
             redirect_id=job_id,
             type=Notification.Type.CHAT,
-            message=f"{request.user.get_full_name()} submitted a chat: {message}"
+            message=f"{sender.get_full_name()} sent a message: {message[:50]}..."
         )
 
-        return JsonResponse({'success': True, 'message': "Chat Added." }, status=200)
+        return JsonResponse({'success': True, 'message': "Chat Added."}, status=200)
     except Exception as e:
         return JsonResponse({'success': False, "message": str(e)}, status=400)
-    
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def get_announcements_outside(request):
