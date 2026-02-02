@@ -162,7 +162,7 @@ def serialize_announcement(announcement, request=None):
         "id": announcement.id,
         "title": announcement.title,
         "content": announcement.content,
-        "created_at": announcement.created_at.strftime("%Y-%m-%d %H:%M:%S") if announcement.created_at else None,
+        "created_at": announcement.created_at if announcement.created_at else None,
         "can_message": announcement.can_message,
         "author": serialize_user_full_profile(announcement.user, request)
     }

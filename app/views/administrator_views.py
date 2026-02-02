@@ -320,14 +320,18 @@ def remove_course(request):
 @permission_classes([IsAuthenticated])
 def get_announcements(request):
     try:
+        is_mine = request.data.get('is_mine', None)
         can_message = request.data.get('can_message', "0")
+        filters = {'can_message': can_message}
+
+        if is_mine == "1" or is_mine is True:
+            filters['user'] = request.user
 
         all_announcements = Announcement.objects.filter(
-            can_message=can_message
+            **filters
         ).select_related('user').order_by('-created_at')
         
         data = [serialize_announcement(a) for a in all_announcements]
-        
         return JsonResponse({ 'announcements': data }, status=200)
     except Exception as e:
         return JsonResponse({"message": str(e)}, status=400)
