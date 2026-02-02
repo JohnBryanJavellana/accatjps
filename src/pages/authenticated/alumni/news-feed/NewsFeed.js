@@ -5,11 +5,14 @@ import useSystemURLCon from '../../../../hooks/useSystemURLCon';
 import useDateFormat from '../../../../hooks/useDateFormat';
 import axios from 'axios';
 import TablePaginationTemplate from '../../components/TablePaginationTemplate';
-import { FormControl, InputLabel, OutlinedInput } from '@mui/material';
+import { FormControl, IconButton, InputLabel, OutlinedInput } from '@mui/material';
 import ModalCUAnnouncement from '../../admin/announcement/components/ModalCUAnnouncement';
 import ModalAnnouncement from '../../admin/announcement/components/ModalAnnouncement';
 
-const NewsFeed = () => {
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+
+const NewsFeed = ({ isMine = false }) => {
     const { getToken } = useGetToken();
     const navigate = useNavigate();
     const { url, urlWithoutToken } = useSystemURLCon();
@@ -35,6 +38,7 @@ const NewsFeed = () => {
 
             const token = getToken('access_token');
             const formData = new FormData();
+            formData.append("isMine", isMine);
             formData.append("can_message", "1");
 
             const response = await axios.post(`${url}/get-announcements`, formData, {
@@ -53,6 +57,33 @@ const NewsFeed = () => {
         }
     }
 
+    const DeleteDocument = async (id) => {
+        try {
+            let ask = window.confirm(`Are you sure you want to remove this announcement? This cannot be undone`);
+            if (ask === false) return;
+
+            const atoken = getToken('access_token');
+            const formData = new FormData();
+            formData.append('documentId', id);
+
+            const response = await axios.post(`${url}/authenticated/administrator/announcement/remove-announcement`, formData, {
+                headers: {
+                    Authorization: `Bearer ${atoken}`
+                }
+            });
+
+            if (response.data.success) {
+                alert(response.data.message);
+            }
+        } catch (error) {
+            error.response.data.status === 500
+                ? navigate('/access-denied')
+                : alert(error.response.data.message);
+        } finally {
+            GetAnnouncements(false);
+        }
+    }
+
     const filteredNewsFeed = useMemo(() => {
         if (!searchText.trim()) return announcements;
         const term = searchText.toLowerCase();
@@ -66,7 +97,7 @@ const NewsFeed = () => {
     return (
         <>
             {
-                !isFetching &&
+                (!isFetching && isMine) &&
                 <div className="text-right mb-3">
                     <button data-toggle="modal" data-target={`#announcement_cu_info_0`} onClick={() => {
                         setIsModalOpen('YES');
@@ -141,16 +172,32 @@ const NewsFeed = () => {
                                         {/* <div style={{ height: '4px', width: '100%', backgroundColor: '#28a745', borderTopLeftRadius: '15px', borderTopRightRadius: '15px', opacity: 0.8 }}></div> */}
 
                                         <div className="p-4">
-                                            <div className="d-flex align-items-center mb-3">
-                                                <div className="bg-light px-3 py-1 rounded-pill d-flex align-items-center" style={{ border: '1px solid #e9ecef' }}>
-                                                    <i className="far fa-newspaper text-success mr-2" style={{ fontSize: '12px' }}></i>
-                                                    <span className="text-uppercase fw-bold text-muted" style={{ fontSize: '10px', letterSpacing: '0.8px' }}>
-                                                        Latest Update
-                                                    </span>
+                                            <div className="d-flex align-items-center justify-content-between mb-3">
+                                                <div className='d-flex align-items-center'>
+                                                    <div className="bg-light px-3 py-1 rounded-pill d-flex align-items-center" style={{ border: '1px solid #e9ecef' }}>
+                                                        <i className="far fa-newspaper text-success mr-2" style={{ fontSize: '12px' }}></i>
+                                                        <span className="text-uppercase fw-bold text-muted" style={{ fontSize: '10px', letterSpacing: '0.8px' }}>
+                                                            Latest Update
+                                                        </span>
+                                                    </div>
+                                                    <span className="mx-2 text-muted" style={{ opacity: 0.5 }}>•</span>
+                                                    <div className="text-muted" style={{ fontSize: '12px' }}>
+                                                        {formatDateToReadable(a.created_at, true)}
+                                                    </div>
                                                 </div>
-                                                <span className="mx-2 text-muted" style={{ opacity: 0.5 }}>•</span>
-                                                <div className="text-muted" style={{ fontSize: '12px' }}>
-                                                    {formatDateToReadable(a.created_at, true)}
+
+                                                <div>
+                                                    <IconButton data-toggle="modal" data-target={`#announcement_cu_info_${a.id}`} onClick={() => {
+                                                        setIsModalOpen('YES');
+                                                        setModalData(a);
+                                                        setModalOpenId(a.id);
+                                                        setModalIndex(0);
+                                                    }}>
+                                                        <EditIcon fontSize="small" color='warning' />
+                                                    </IconButton>
+                                                    <IconButton onClick={() => DeleteDocument(a.id)}>
+                                                        <DeleteIcon fontSize="small" color='error' />
+                                                    </IconButton>
                                                 </div>
                                             </div>
 

@@ -93,8 +93,8 @@ const ModalCUAnnouncement = ({ id, data, modalTitle, callbackFunction, canMessag
 
                         <CustomFileUpload
                             id="sec"
-                            label="Add Photo"
-                            description="Add photo to your post or announcement"
+                            label={`${data ? 'Update' : 'Add'} Photo`}
+                            description={`${data ? 'Update' : 'Add'} photo to your post or announcement`}
                             icon="fas fa-file"
                             color="#14a8fd"
                             file={attachment}

@@ -31,10 +31,10 @@ import Gallery from "./pages/guest/Gallery/Gallery";
 import AboutUs from "./pages/guest/AboutUs/AboutUs";
 import SystemSettings from "./pages/authenticated/admin/system-settings/SystemSettings";
 import AAnnouncement from "./pages/authenticated/admin/announcement/AAnnouncement";
-import NewsFeed from "./pages/authenticated/alumni/news-feed/NewsFeed";
 import EReport from "./pages/authenticated/report/EReport";
 import AlReport from "./pages/authenticated/alumni/report/AlReport";
 import ShowAllNotification from "./pages/authenticated/components/CustomNotification/ShowAllNotification";
+import NF from "./pages/authenticated/alumni/news-feed/NF";
 
 function App() {
     return (
@@ -71,7 +71,7 @@ function App() {
                         <Route path="/welcome/alumni/" element={<Home />} />
                         <Route path="/welcome/alumni/notifications" element={<ShowAllNotification />} />
                         <Route path="/welcome/report/" element={<AlReport />} />
-                        <Route path="/welcome/news-feed/" element={<NewsFeed />} />
+                        <Route path="/welcome/news-feed/" element={<NF />} />
                         <Route path="/welcome/alumni/jobs" element={<AJP />} />
                         <Route path="/welcome/alumni/info-board" element={<InfoBoard />} />
                         <Route path="/welcome/alumni/gallery" element={<Gallery />} />
