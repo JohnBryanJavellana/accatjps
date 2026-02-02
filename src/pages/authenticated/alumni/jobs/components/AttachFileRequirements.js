@@ -81,7 +81,16 @@ const AttachFileRequirements = ({ id, data, modalTitle, callbackFunction }) => {
                                             className="custom-file-input"
                                             id="resume_upload"
                                             accept=".pdf,.doc,.docx"
-                                            onChange={(e) => setResume(e.target.files[0])}
+                                            onChange={(e) => {
+                                                const val = e.target.files[0];
+
+                                                if (val.size > 5 * 1024 * 1024) {
+                                                    alert("File is too large. Please upload a file smaller than 5MB.");
+                                                    return;
+                                                }
+
+                                                setResume(val);
+                                            }}
                                         />
                                         <label className="custom-file-label" htmlFor="resume_upload">
                                             {resume ? resume.name : 'Choose file...'}
@@ -102,7 +111,16 @@ const AttachFileRequirements = ({ id, data, modalTitle, callbackFunction }) => {
                                             className="custom-file-input"
                                             id="cover_letter_upload"
                                             accept=".pdf,.doc,.docx"
-                                            onChange={(e) => setCoverLetter(e.target.files[0])}
+                                            onChange={(e) => {
+                                                const val = e.target.files[0];
+
+                                                if (val.size > 5 * 1024 * 1024) {
+                                                    alert("File is too large. Please upload a file smaller than 5MB.");
+                                                    return;
+                                                }
+
+                                                setCoverLetter(val);
+                                            }}
                                         />
                                         <label className="custom-file-label" htmlFor="cover_letter_upload">
                                             {coverLetter ? coverLetter.name : 'Choose file...'}
