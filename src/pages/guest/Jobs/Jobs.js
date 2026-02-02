@@ -150,7 +150,7 @@ const Jobs = () => {
                                                         }}>
                                                             <div className="card-body text-sm pb-2">
                                                                 <div className="row">
-                                                                    <div className="col-xl-10 mb-2">
+                                                                    <div className="col-9 mb-2">
                                                                         <div className="row">
                                                                             <div className="col-xl-12 text-bold text-dark h5">
                                                                                 {job?.title}
@@ -186,8 +186,16 @@ const Jobs = () => {
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div className="col-xl-2 text-center mb-2">
-                                                                        <img src={job?.posted_by.profile_picture} className='elevation-1' height={80} />
+                                                                    <div className="col-3 mb-2 text-center" style={{ height: 100, overflow: 'hidden' }}>
+                                                                        <img
+                                                                            src={job?.posted_by?.profile_picture}
+                                                                            alt="Profile"
+                                                                            style={{
+                                                                                width: '100%',
+                                                                                height: '100%',
+                                                                                objectFit: 'contain'
+                                                                            }}
+                                                                        />
                                                                     </div>
                                                                 </div>
                                                             </div>

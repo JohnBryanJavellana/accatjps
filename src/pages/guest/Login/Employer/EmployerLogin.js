@@ -47,6 +47,7 @@ const EmployerLogin = () => {
             if (response.data.success) {
                 const tokens = response.data.token;
                 const role = response.data.role;
+                setToken('role-access', role);
                 setToken('access_token', tokens.access);
                 setToken('refresh_token', tokens.refresh);
 

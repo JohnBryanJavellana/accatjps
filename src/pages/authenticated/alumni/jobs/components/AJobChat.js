@@ -63,9 +63,7 @@ const AJobChat = ({ id, data, modalTitle, callbackFunction, fromSenderId, toSend
 
             formData.append('message', message);
             formData.append('job_id', data?.application_id);
-            formData.append('from_sender_id', fromSenderId);
             formData.append('to_sender_id', toSenderId);
-            formData.append('main_job_id', data?.id);
 
             await axios.post(`${url}/authenticated/submit-job-chat`, formData, {
                 headers: {
@@ -84,6 +82,8 @@ const AJobChat = ({ id, data, modalTitle, callbackFunction, fromSenderId, toSend
     }
 
     useEffect(() => {
+        console.log(data);
+
         if (data && userData) {
             GetChatMessages(true);
             return () => { };

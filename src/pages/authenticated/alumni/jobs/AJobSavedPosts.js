@@ -109,7 +109,7 @@ const AJobSavedPosts = () => {
                                         }}>
                                             <div className="card-body text-sm">
                                                 <div className="row">
-                                                    <div className="col-xl-10">
+                                                    <div className="col-9">
                                                         <div className="row">
                                                             <div className="col-xl-12 text-bold h5">
                                                                 {job?.title}
@@ -145,8 +145,16 @@ const AJobSavedPosts = () => {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="col-xl-2 text-center">
-                                                        <img src={job?.posted_by.profile_picture} className='shadow-sm' height={80} />
+                                                    <div className="col-3 mb-2 text-center" style={{ height: 100, overflow: 'hidden' }}>
+                                                        <img
+                                                            src={job?.posted_by?.profile_picture}
+                                                            alt="Profile"
+                                                            style={{
+                                                                width: '100%',
+                                                                height: '100%',
+                                                                objectFit: 'contain'
+                                                            }}
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>

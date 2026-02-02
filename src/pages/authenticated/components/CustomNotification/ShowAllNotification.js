@@ -12,7 +12,7 @@ const ShowAllNotification = () => {
             <section className="content mt-3">
                 <div className="">
                     <div className="card elevation-0 border-0 bg-white">
-                        <div className="card-body">
+                        <div className="card-body text-sm">
                             <Notification limit={null} onMainPage={true} />
                         </div>
                     </div>
