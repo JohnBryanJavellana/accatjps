@@ -147,7 +147,7 @@ const AttachFileRequirements = ({ id, data, modalTitle, callbackFunction }) => {
                         </button>
 
                         <button type="button" onClick={() => ApplyJob()} disabled={isSubmitting} className={`btn-sm btn btn-success elevation-1`}>
-                            <i className='fas fa-paper-plane mr-2'></i> Submit Application
+                            <i className='fas fa-paper-plane mr-2'></i> {isSubmitting ? 'Submitting' : 'Submit'} Application
                         </button>
                     </>
                 }
