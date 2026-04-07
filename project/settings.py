@@ -131,9 +131,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'projects.gdrive.only@gmail.com'
-EMAIL_HOST_PASSWORD = 'bkgv zszm lwfa ztdb'
-EMAIL_REDIRECT = "https://accatjps.online"
+EMAIL_HOST_USER = 'johnbryanjavellana@gmail.com'
+EMAIL_HOST_PASSWORD = 'ijks feua mefu pymx'
+EMAIL_REDIRECT = "http://localhost:3000"
+# EMAIL_REDIRECT = "https://accatjps.online"
 
 CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:3001", "http://127.0.0.1:3001"]
 # CORS_ALLOWED_ORIGINS = ["https://accatjps.online", 'https://www.accatjps.online']
