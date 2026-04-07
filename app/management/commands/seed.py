@@ -1,13 +1,18 @@
+import random
 from django.core.management.base import BaseCommand
-from app.models import EducationCourse
+from django.contrib.auth.hashers import make_password
+from app.models import EducationCourse, CustomUser, AlumniEducationalProfile
+from faker import Faker
 
 class Command(BaseCommand):
-    help = "Seeds the database with courses offered in Tacloban City"
+    help = "Seeds the database with courses and 10 fake alumni accounts"
 
     def handle(self, *args, **options):
+        fake = Faker()
+        
+        # --- Seed Education Courses ---
         self.stdout.write("Seeding Education Courses...")
-
-        courses = [
+        courses_data = [
             ("BSIT", "Bachelor of Science in Information Technology"),
             ("BSCS", "Bachelor of Science in Computer Science"),
             ("BSIS", "Bachelor of Science in Information Systems"),
@@ -28,18 +33,61 @@ class Command(BaseCommand):
             ("AB Psych", "Bachelor of Arts in Psychology"),
         ]
 
-        count = 0
-        for abbr, full_name in courses:
+        course_objects = []
+        course_count = 0
+        for abbr, full_name in courses_data:
             name_to_save = f"{full_name} ({abbr})"
-            
             obj, created = EducationCourse.objects.get_or_create(
                 course_name=name_to_save
             )
-            
+            course_objects.append(obj)
             if created:
-                count += 1
-                self.stdout.write(f"Added: {name_to_save}")
+                course_count += 1
+
+        self.stdout.write(self.style.SUCCESS(f"Successfully seeded {course_count} courses!"))
+
+        # --- Seed Alumni Accounts ---
+        self.stdout.write("Seeding 10 Alumni Accounts...")
+        
+        achievements_pool = [
+            "Cum Laude", "Magna Cum Laude", "Dean's Lister", 
+            "Student Council President", "Best in Capstone Project",
+            "Academic Excellence Awardee", "Leadership Award", 
+            "Research of the Year", "Varsity Captain"
+        ]
+
+        password = make_password("Password#2026")
+        alumni_count = 0
+
+        for _ in range(10):
+            first_name = fake.first_name()
+            last_name = fake.last_name()
+            email = fake.unique.email()
+            
+            # Create User
+            user = CustomUser.objects.create(
+                first_name=first_name,
+                last_name=last_name,
+                middle_name=fake.last_name(),
+                suffix=random.choice(["", "Jr.", "III"]),
+                role=CustomUser.Role.ALUMNI,
+                username=email,
+                email=email,
+                contact_number=None,
+                password=password,
+                is_active=True
+            )
+
+            # Create Profile
+            AlumniEducationalProfile.objects.create(
+                user=user,
+                course=random.choice(course_objects),
+                course_highlights=random.choice(achievements_pool),
+                year_graduated=random.randint(2015, 2025)
+            )
+            alumni_count += 1
+            self.stdout.write(f"Created Alumni: {first_name} {last_name}")
 
         self.stdout.write(
-            self.style.SUCCESS(f"Successfully seeded {count} courses!")
+            self.style.SUCCESS(f"Successfully seeded {alumni_count} alumni accounts!")
         )
