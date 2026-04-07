@@ -236,3 +236,12 @@ class NotificationViewer(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
     notification = models.ForeignKey(Notification, on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+class AlumniMasterlistReference(models.Model):
+    first_name = models.CharField(max_length=150, blank=True)
+    middle_name = models.CharField(max_length=150, blank=True)
+    last_name = models.CharField(max_length=150, blank=True)
+    suffix = models.CharField(max_length=10, blank=True, null=True)
+    birthday = models.DateField(blank=True, null=True) 
+    course = models.ForeignKey(EducationCourse, on_delete=models.CASCADE)
+    year_graduated = models.IntegerField()

@@ -5,6 +5,7 @@ from django.contrib.auth.hashers import make_password
 import json
 from django.db import transaction
 from app.models import *
+from django.db.models import Q
 from django.utils.http import urlsafe_base64_encode
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_bytes
@@ -27,8 +28,8 @@ def login_user(request):
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            return JsonResponse({"success": False, "message": "Alumni Not Found: We could not locate a record for this alumni in our database. Please check the spelling, or contact the system administrator."}, status=401)
-
+            return JsonResponse({"success": False, "message": "Invalid credentials."}, status=401)
+        
         if user.check_password(password):
             if not user.is_active:
                 return JsonResponse({
@@ -83,26 +84,34 @@ def register_user(request):
             phoneNumber = request.POST.get("phoneNumber")
             confirm_password = request.POST.get("password_confirmation")
 
-            course = request.POST.get('course')
-            yearGraduated = request.POST.get('yearGraduated')
-
             if CustomUser.objects.filter(email=email).exists():
                 return JsonResponse({"message": "Email already registered"}, status=400)
 
             if password != confirm_password:
                 return JsonResponse({"message": "Password not match. Please try again."}, status=400)
             
-            matched_profile = AlumniEducationalProfile.objects.filter(
-                user__first_name__iexact=fname,
-                user__last_name__iexact=lname,
-                course_id=course,
-                year_graduated=yearGraduated
-            ).first()
+            if role == "ALUMNI":
+                course = request.POST.get('course')
+                yearGraduated = request.POST.get('yearGraduated')
+    
+                clean_fname = fname.strip()
+                clean_lname = lname.strip()
+                clean_mname = mname.strip() if mname else ""
+                clean_suffix = suffix.strip() if suffix else ""
+                
+                alumni_record = AlumniMasterlistReference.objects.filter(
+                    first_name__iexact=clean_fname,
+                    last_name__iexact=clean_lname,
+                    middle_name__iexact=clean_mname,
+                    suffix__iexact=clean_suffix,
+                    course_id=course,
+                    year_graduated=yearGraduated
+                ).first()
 
-            if not matched_profile:
-                return JsonResponse({
-                    "message": "Verification failed. Records do not match our alumni database."
-                }, status=403)
+                if not alumni_record:
+                    return JsonResponse({
+                        "message": "Alumni Not Found: We could not locate a record for this alumni in our database. Please check the spelling, or contact the system administrator."
+                    }, status=403)
             
             user = CustomUser.objects.create(
                 first_name=fname,
@@ -136,6 +145,8 @@ def register_user(request):
                 )
 
             if role == "ALUMNI":
+                course = request.POST.get('course')
+                yearGraduated = request.POST.get('yearGraduated')
                 languages_list = request.POST.getlist('language[]')
                 skills_list = request.POST.getlist('skill[]')
                 certificates_json = request.POST.get('certificates')
@@ -148,7 +159,7 @@ def register_user(request):
                 ideas = request.POST.get('ability_to_present_ideas')
                 communication = request.POST.get('communication_skills')
                 performance = request.POST.get('student_performance_rating')
-    
+
                 for lang_item in languages_list:
                     if lang_item:
                         AlumniLanguagesProfile.objects.create(
@@ -209,7 +220,6 @@ def register_user(request):
                 "success": True,
                 "message": "Registration successful. Please check your email to verify your account."
             }, status=201)
-
         except Exception as e:
             return JsonResponse({"message": str(e)}, status=400)
 
