@@ -134,6 +134,11 @@ const AlumniRegistration = () => {
         } finally {
             setIsSubmitting(false);
             setShowLoader(false);
+
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         }
     }
 
