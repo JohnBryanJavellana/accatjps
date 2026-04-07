@@ -110,7 +110,12 @@ const EmployerRegistration = () => {
     return (
         <>
             <SubmitLoadingAnim place='OUT' cls="loader" />
-            <Toast callbackFunction={toastStatus === "success" ? () => navigate('/employer/login') : () => { }} />
+            <Toast callbackFunction={toastStatus === "success" ? () => navigate('/employer/login') : () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }} />
 
             <div className={`guest-bg`}>
                 <div className="container p-0">

@@ -140,7 +140,12 @@ const AlumniRegistration = () => {
     return (
         <>
             <SubmitLoadingAnim place='OUT' cls="loader" />
-            <Toast callbackFunction={toastStatus === "success" ? () => navigate('/alumni/login') : () => { }} />
+            <Toast callbackFunction={toastStatus === "success" ? () => navigate('/alumni/login') : () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }} />
 
             {
                 modalIndex === 1 &&
