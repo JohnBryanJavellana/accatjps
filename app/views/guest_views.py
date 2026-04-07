@@ -27,7 +27,7 @@ def login_user(request):
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            return JsonResponse({"success": False, "message": "Invalid credentials"}, status=401)
+            return JsonResponse({"success": False, "message": "Alumni Not Found: We could not locate a record for this alumni in our database. Please check the spelling, or contact the system administrator."}, status=401)
 
         if user.check_password(password):
             if not user.is_active:
@@ -83,11 +83,26 @@ def register_user(request):
             phoneNumber = request.POST.get("phoneNumber")
             confirm_password = request.POST.get("password_confirmation")
 
+            course = request.POST.get('course')
+            yearGraduated = request.POST.get('yearGraduated')
+
             if CustomUser.objects.filter(email=email).exists():
                 return JsonResponse({"message": "Email already registered"}, status=400)
 
             if password != confirm_password:
                 return JsonResponse({"message": "Password not match. Please try again."}, status=400)
+            
+            matched_profile = AlumniEducationalProfile.objects.filter(
+                user__first_name__iexact=fname,
+                user__last_name__iexact=lname,
+                course_id=course,
+                year_graduated=yearGraduated
+            ).first()
+
+            if not matched_profile:
+                return JsonResponse({
+                    "message": "Verification failed. Records do not match our alumni database."
+                }, status=403)
             
             user = CustomUser.objects.create(
                 first_name=fname,
@@ -124,9 +139,7 @@ def register_user(request):
                 languages_list = request.POST.getlist('language[]')
                 skills_list = request.POST.getlist('skill[]')
                 certificates_json = request.POST.get('certificates')
-                course = request.POST.get('course')
                 courseHighlights = request.POST.get('courseHighlights')
-                yearGraduated = request.POST.get('yearGraduated')
                 appearance = request.POST.get('general_appearance')
                 speaking = request.POST.get('manner_of_speaking')
                 physical = request.POST.get('physical_condition')
