@@ -46,7 +46,7 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS(f"Successfully seeded {course_count} courses!"))
 
-        # --- Seed Alumni Accounts ---
+        # SEED ALUMNI DUMMY ACCOUNTS
         self.stdout.write("Seeding 10 Alumni Accounts...")
         
         achievements_pool = [
